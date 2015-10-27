@@ -19,8 +19,8 @@ gpio::gpio(uint8_t p )
 
 void gpio::setOutPin (unsigned char pin , mode m , out o)	
 {
-  *(reg)(PortBase[prt]+(4*pin)) |= PORT_PCR_MUX(m);
-  *(reg)(PortBase[prt]+(4*pin)) |= o << PORT_PCR_ODE_SHIFT;
+  *(reg)(PortBase[prt]+(pin<<2)) |= PORT_PCR_MUX(m);
+  *(reg)(PortBase[prt]+(pin<<2)) |= o << PORT_PCR_ODE_SHIFT;
   *(reg)(GpioBase[prt]+PDDR) |= 1 << pin;
 }
 
