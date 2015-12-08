@@ -1,6 +1,6 @@
 #include "MK02F12810.h"                 // Device header
 
-#define F_CPU 8000000
+#define F_CPU 20971
 #define BAUD  9600
 
 #define RX 1

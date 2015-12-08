@@ -7,7 +7,10 @@ int main ()
 {
 	
 	init_uart0();
+	uart0_tx (0xFF);
+	
 	while (1)
 	{
+		
 	}
 }
