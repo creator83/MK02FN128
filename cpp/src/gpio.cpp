@@ -1,51 +1,80 @@
 #include "gpio.h"
 
-uint32_t gpio::PortBase [5] = {PORTA_BASE , PORTB_BASE , PORTC_BASE, PORTD_BASE , PORTE_BASE};
-uint32_t gpio::GpioBase [5] = {PTA_BASE , PTB_BASE , PTC_BASE , PTD_BASE , PTE_BASE};
+GPIO_MemMapPtr Gpio::GpioBase [5] = {PTA_BASE_PTR , PTB_BASE_PTR , PTC_BASE_PTR, PTD_BASE_PTR, PTE_BASE_PTR};
+PORT_MemMapPtr Gpio::PortBase [5] = {PORTA_BASE_PTR, PORTB_BASE_PTR, PORTC_BASE_PTR, PORTD_BASE_PTR, PORTE_BASE_PTR};
 
-gpio::gpio (Port p)
+Gpio::Gpio (Port p)
 {
   prt = p;
   //takt port
   SIM->SCGC5 |= (0x200 << p);
 }
 
-gpio::gpio(uint8_t p )
+Gpio::Gpio (uint8_t p )
 {
   prt = p;
 //takt port
   SIM->SCGC5 |= (0x200 << p);
 }
 
-void gpio::setOutPin (unsigned char pin , mode m , out o)	
+
+
+void Gpio::settingPin (unsigned char pin , mux mx, mode m)
 {
-  *(reg)(PortBase[prt]+(pin<<2)) |= PORT_PCR_MUX(m);
-  *(reg)(PortBase[prt]+(pin<<2)) |= o << PORT_PCR_ODE_SHIFT;
-  *(reg)(GpioBase[prt]+PDDR) |= 1 << pin;
+	PORT_PCR_REG(PortBase[prt],pin) |= mx << PORT_PCR_MUX_SHIFT;
+	GPIO_PDDR_REG(GpioBase[prt]) &= ~(1 << pin);
+	GPIO_PDDR_REG(GpioBase[prt]) |= (m << pin);
 }
 
-void gpio::setPin (unsigned int pin )
+void Gpio::setPin (unsigned int pin )
 {
-  *(reg)(GpioBase[prt]+PSOR) |= 1 << pin;
+	GPIO_PSOR_REG(GpioBase[prt]) |= 1 << pin;
 }
 
-void gpio::clearPin (unsigned char pin)
+void Gpio::clearPin (unsigned char pin)
 {
-  *(reg)(GpioBase[prt]+PCOR) |= 1 << pin;
+	GPIO_PCOR_REG(GpioBase[prt]) |= 1 << pin;
 }
 
-void gpio::ChangePinState (unsigned char pin)
+void Gpio::changePinState (unsigned char pin)
 {
-  *(reg)(GpioBase[prt]+PTOR) |= 1 << pin;
+	GPIO_PTOR_REG(GpioBase[prt]) |= 1 << pin;
 }
 
-void gpio::SetPinState (unsigned char pin , unsigned char state)
+void Gpio::setPinState (unsigned char pin , unsigned char state)
 {
-  if (state)setPin (pin);
-  else clearPin (pin);  
+	clearPin (pin);
+	GPIO_PDOR_REG(GpioBase[prt]) = (state << pin);
 }
 
-void gpio::setValPort (uint32_t value)
+bool Gpio::pinState (unsigned char pin)
 {
-  *(reg)(GpioBase[prt]+PDOR) = value;
+	return (GPIO_PDIR_REG(GpioBase[prt])&(1 << pin));
 }
+
+void Gpio::settingPort (uint32_t value, mux mx, mode m )
+{
+	union
+	{
+		uint32_t full;
+		uint16_t half[2];
+	}val;
+	val.full = value;
+	PORT_GPCLR_REG(PortBase[prt]) = (val.half[0]<<16| mx << PORT_PCR_MUX_SHIFT);
+	PORT_GPCHR_REG(PortBase[prt]) = (val.half[1]<<16| mx << PORT_PCR_MUX_SHIFT);
+	if (mx==GPIO&&m)
+	{
+		GPIO_PDDR_REG(GpioBase[prt]) |= value;
+	}
+}
+
+void Gpio::setValPort (uint32_t value)
+{
+	GPIO_PSOR_REG(GpioBase[prt])  |= value;
+}
+
+void Gpio::clearValPort (uint32_t value)
+{
+	GPIO_PCOR_REG(GpioBase[prt])  |= value;
+}
+
