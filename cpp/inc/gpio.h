@@ -15,14 +15,7 @@ public:
   enum mode {Input, Output};
   enum out {PushPull , OpenDrain};
   enum PP {NoPP , PullUp , PullDown};
-  enum rgstr {
-  PDOR = 0x00,
-  PSOR = 0x04,
-  PCOR = 0x08,
-  PTOR = 0x0C,
-  PDIR = 0x10,
-  PDDR = 0x14
-};
+
 private:
   static PORT_MemMapPtr PortBase [5];
   static GPIO_MemMapPtr GpioBase [5];

@@ -1,5 +1,8 @@
 #include "MK02F12810.h"                 // Device header
 #include "gpio.h"
+#include "tact.h"
+
+Tact frq;
 
 const uint8_t led = 1;
 
