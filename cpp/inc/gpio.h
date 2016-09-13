@@ -23,10 +23,14 @@ private:
   unsigned char prt;
 //functions
 public:
+  Gpio ();
   Gpio(Port p );
   Gpio(uint8_t p );
+  void settingPinPort (Port p);
+  void settingPinPort (uint8_t p);
   //function for pins
   void settingPin (uint8_t pin , mux mx = GPIO, mode m = Output);
+  void settingPin (uint8_t pin , uint8_t mx = 1, uint8_t m = 1);
   void setPin (unsigned int pin );
   void clearPin (unsigned char pin);
   void changePinState (unsigned char pin);

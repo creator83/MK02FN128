@@ -1,95 +1,130 @@
-#include "spi.h"
+#include "Spi.h"
 
-//CS(A),SCK(B),MOSI(A), MISO(A)
-uint8_t spi::pins_d[4]={5,0,6,7};
-/*
+//Ctar_set Spi::set [2] = {&Spi::C0, &Spi::C1};
 
-spi::spi(Division d_, Cpol cpol_, Cpha cpha_, Mode m, Role r)
-:pin_A (Gpio::A), pin_B (Gpio::B)
+
+Spi::Spi(CTAR_number n, Role r)
+
 {
-  
   //===Settings pins===//
 
   //Settings pins SCK, MOSI, MISO as ALT3
-	pin_A.setOutPort (((1 << pins_d[CS])|(1 << pins_d[MOSI])|(1 << pins_d[MISO])), Gpio::Alt3);
-	pin_B.setOutPin (pins_d[SCK], Gpio::Alt3);
 
-  //Turn on tacting SPI1
-  SIM->SCGC4 |= SIM_SCGC4_SPI0_MASK;
+  //Turn on tacting Spi1
+  SIM->SCGC6 |= SIM_SCGC6_SPI0_MASK;
 
-  //===Settings SPI1===//
+  //===Settings Spi1===//
+  //Settings number CTAR
+  ctar_N = n;
 
-  //Settings baudrate
-  SPI0->BR = SPI_BR_SPPR(d_);
+  //Settings role
+  SPI0->MCR &= ~ SPI_MCR_MSTR_MASK;
+  SPI0->MCR |= r << SPI_MCR_MSTR_SHIFT;
 
-  //Settings hardware mode
-  SPI0->C2 &= ~SPI_C2_MODFEN_MASK;
+  //Start
+  SPI0->MCR &= ~SPI_MCR_HALT_MASK;
 
-  SPI0->C2 |= m << SPI_C2_MODFEN_SHIFT;
+}
 
-  //
+void Spi::set_CS (PORT p, uint8_t pin, CS_number c,  Mux m)
+{
+	pin_CS.settingPinPort(p);
+	pin_CS.settingPin(pin, m);
+	cs_N = c;
+	CS.port = p;
+	CS.pin = pin;
+	CS.mux = m;
+}
 
-  SPI0->C1 &= ~(SPI_C1_MSTR_MASK |SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK|SPI_C1_SSOE_MASK);
+void Spi::set_SCK (PORT p, uint8_t pin, Mux m)
+{
+	pin_SCK.settingPinPort(p);
+	pin_SCK.settingPin(pin, m);
+	SCK.port = p;
+	SCK.pin = pin;
+	SCK.mux = m;
+}
 
-  SPI0->C1 |= (r << SPI_C1_MSTR_SHIFT|cpol_ << SPI_C1_CPOL_SHIFT|cpha_ << SPI_C1_CPHA_SHIFT|m << SPI_C1_SSOE_SHIFT | SPI_C1_SPE_MASK);
+void Spi::set_MOSI (PORT p, uint8_t pin, Mux m)
+{
+	pin_MOSI.settingPinPort(p);
+	pin_MOSI.settingPin(pin, m);
+	MOSI.port = p;
+	MOSI.pin = pin;
+	MOSI.mux = m;
+}
+
+void Spi::set_MISO (PORT p, uint8_t pin, Mux m)
+{
+	pin_MISO.settingPinPort(p);
+	pin_MISO.settingPin(pin, m);
+	MISO.port = p;
+	MISO.pin = pin;
+	MISO.mux = m;
+}
+
+void Spi::set_cpol (Cpol c)
+{
+	C1.cpol = c;
+	SPI0_CTAR(ctar_N) = SPI_CTAR_SLAVE_CPOL(c);
+}
+
+void Spi::set_cpha (Cpha c)
+{
+	C1.cpha = c;
+	SPI0_CTAR(ctar_N) = SPI_CTAR_SLAVE_CPHA(c);
+}
+
+void Spi::set_f_size (Fsize f)
+{
+	C1.f_size = f;
+	SPI0_CTAR(ctar_N) = SPI_CTAR_FMSZ(f);
+}
+
+void Spi::set_baudrate (Division d)
+{
+	//C1.br = d;
+	SPI0_CTAR(ctar_N) = SPI_CTAR_BR (d);
 }
 
 
-void spi::transmit (uint8_t data)
+void Spi::transmit (uint8_t data)
 {
-	while(!(SPI0->S & SPI_S_SPTEF_MASK));
-	SPI0->D = data;
+
 }
 
 
-uint8_t spi::receive ()
+uint8_t Spi::receive ()
 {
-	while(!(SPI0->S & SPI_S_SPTEF_MASK));
-	SPI0->D = 0;
-	while (!(SPI0->S & SPI_S_SPRF_MASK));
-	return SPI0->D;
+
 }
 
-uint8_t spi::exchange (uint8_t data)
+uint8_t Spi::exchange (uint8_t data)
 {
-	while(!(SPI0->S & SPI_S_SPTEF_MASK));
-	SPI0->D = data;
-	while (!(SPI0->S & SPI_S_SPRF_MASK));
-	return SPI0->D;
-}
-void spi::put_data (uint8_t data)
-{
-	SPI0->D = data;
+
 }
 
-uint8_t spi::get_data ()
+void Spi::put_data (uint8_t data)
 {
-	return SPI0->D;
+	SPI0->PUSHR = SPI_PUSHR_PCS(cs_N)|SPI_PUSHR_TXDATA(data);
 }
 
-bool spi::flag_sptef ()
+uint8_t Spi::get_data ()
 {
-	return SPI0->S & SPI_S_SPTEF_MASK;
+
 }
 
-bool spi::flag_sprf ()
+bool Spi::flag_tcf ()
 {
-	return SPI0->S & SPI_S_SPRF_MASK;
+	return SPI0->SR&SPI_SR_TCF_MASK;
 }
 
-void spi::set_CS (PORT p, uint8_t pin)
+void Spi::assert_CS()
 {
-	pin_CS.setPort (p);
-	pin_CS.setOutPin (pin);
-	p_CS = pin;
+	pin_CS.clearPin(CS.pin);
 }
 
-void spi::assert_CS()
+void Spi::disassert_CS()
 {
-	pin_CS.clearPin (p_CS);
+	pin_CS.setPin(CS.pin);
 }
-
-void spi::disassert_CS()
-{
-	pin_CS.setPin (p_CS);
-}*/
