@@ -1,6 +1,6 @@
 #include "Spi.h"
 
-//Ctar_set Spi::set [2] = {&Spi::C0, &Spi::C1};
+Spi::Ctar_set* Spi::set [2] = {&Spi::C0, &Spi::C1};
 
 
 Spi::Spi(CTAR_number n, Role r)

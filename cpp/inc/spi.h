@@ -73,7 +73,7 @@ static struct Ctar_set
 	  uint8_t br;
   }C0, C1;
 
-static Ctar_set (*set) [2];
+static Ctar_set * set [2];
   /*
   struct
   {
