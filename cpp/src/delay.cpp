@@ -1,5 +1,5 @@
 #include "delay.h"
-
+/*
 extern "C"
 {
   void SysTick_Handler ();
@@ -11,17 +11,21 @@ void SysTick_Handler (void)
 {
 	if (delay > 0)delay--;
 }
-
+*/
 void delay_ms (uint16_t del)
 {
-	SysTick_Config (Tact::get_frq_cpu()*1000);
-	delay = del;
-	while (delay);
+	SysTick->LOAD = Tact::get_frq_cpu()*1000*del;
+	SysTick->VAL = 0xFF;
+	SysTick->CTRL = SysTick_CTRL_ENABLE_Msk|SysTick_CTRL_CLKSOURCE_Msk;
+	while (!(SysTick->CTRL&SysTick_CTRL_COUNTFLAG_Msk));
+	SysTick->CTRL &= ~ SysTick_CTRL_COUNTFLAG_Msk;
 }
 
 void delay_us (uint16_t del)
 {
-	SysTick_Config (Tact::get_frq_cpu()*1000000);
-	delay = del;
-	while (delay);
+	SysTick->LOAD = Tact::get_frq_cpu()*del;
+	SysTick->VAL = 0xFF;
+	SysTick->CTRL = SysTick_CTRL_ENABLE_Msk|SysTick_CTRL_CLKSOURCE_Msk;
+	while (!(SysTick->CTRL&SysTick_CTRL_COUNTFLAG_Msk));
+	SysTick->CTRL &= ~ SysTick_CTRL_COUNTFLAG_Msk;
 }

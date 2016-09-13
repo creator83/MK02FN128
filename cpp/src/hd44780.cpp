@@ -2,21 +2,20 @@
 
 
 Hd44780::Hd44780()
-:pinData (Gpio::A), pinCommand1(Gpio::A), pinCommand2(Gpio::B)
+:pin (Gpio::D)
 {
-	pinData.settingPort ((0x0F<<shift_data));
-	pinCommand1.settingPin (E);
-	pinCommand2.settingPin (RS);
+	pin.settingPort ((0x0F<<shift_data)|1 << RS | 1 << E);
+	init();
 
 }
 
 void Hd44780::init ()
 {
-	delay_ms (15);
+	delay_ms (16);
 	tetra (0x03);
-	delay_ms (4);
+	delay_ms (5);
 	tetra (0x03);
-	delay_us (100);
+	delay_us (110);
 	tetra (0x03);
 	delay_ms (1);
 	tetra (0x02);
@@ -30,15 +29,16 @@ void Hd44780::init ()
 	delay_ms (1);
 	command (0x06);
 	delay_ms (1);
+	clear();
 }
 
 void Hd44780::tetra (uint8_t t)
 {
 	E_assert ();
 	delay_us (50);
-	pinData.clearValPort (0x0F<<shift_data);
+	pin.clearValPort (0x0F<<shift_data);
 	t &= 0x0F;
-	pinData.setValPort(t<<shift_data);
+	pin.setValPort(t<<shift_data);
 	E_disassert ();
 	delay_us (50);
 }

@@ -37,6 +37,13 @@ public:
   void settingPort (uint32_t val, mux mx = GPIO, mode m = Output);
   void setValPort (uint32_t value);
   void clearValPort (uint32_t value);
+public:
+  class Pin
+  {
+  public:
+	  Pin ();
+	  void sPin (unsigned int pin );
+  };
 
 };
 

@@ -33,10 +33,10 @@ public:
 	
 protected:
 private:
-	enum commPins {RS=12, E=2};
-	const char shift_data = 7;
+	enum commPins {RS=4, E=5};
+	const char shift_data = 0;
 	//uint8_t custom_chars [][8];
-	Gpio pinData, pinCommand1, pinCommand2;
+	Gpio pin;
 	unsigned int x_start, x_end, y_start, y_end;
 
 //functions
@@ -60,10 +60,10 @@ private:
 
 };
 
-inline void Hd44780::RS_assert (){pinCommand1.setPin (RS);}
-inline void Hd44780::RS_disassert (){pinCommand1.clearPin (RS);}
-inline void Hd44780::E_assert (){pinCommand2.setPin (E);}
-inline void Hd44780::E_disassert (){pinCommand2.clearPin (E);}
+inline void Hd44780::RS_assert (){pin.setPin (RS);}
+inline void Hd44780::RS_disassert (){pin.clearPin (RS);}
+inline void Hd44780::E_assert (){pin.setPin (E);}
+inline void Hd44780::E_disassert (){pin.clearPin (E);}
 
 
 
