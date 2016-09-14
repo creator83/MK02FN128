@@ -29,7 +29,15 @@ void delay_ms (uint16_t del)
 	ms.stop();
 	ms.clear_flag();
 }
-
+void delay_us (uint16_t del)
+{
+	Pit us (Pit::ch0, del, Pit::us);
+	us.start();
+	while (!(us.flag_TIF()));
+	us.stop();
+	us.clear_flag();
+}
+/*
 void delay_us (uint16_t del)
 {
 	SysTick->LOAD = Tact::get_frq_cpu()*del;
@@ -37,4 +45,4 @@ void delay_us (uint16_t del)
 	SysTick->CTRL = SysTick_CTRL_ENABLE_Msk|SysTick_CTRL_CLKSOURCE_Msk;
 	while (!(SysTick->CTRL&SysTick_CTRL_COUNTFLAG_Msk));
 	SysTick->CTRL &= ~ SysTick_CTRL_COUNTFLAG_Msk;
-}
+}*/
