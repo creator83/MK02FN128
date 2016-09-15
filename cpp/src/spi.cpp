@@ -3,8 +3,8 @@
 Spi::Ctar_set Spi::C1;
 Spi::Ctar_set Spi::C0;
 
-Spi::Ctar_set* Spi::set_ctar [2] = {&Spi::C0, &Spi::C1};
-
+//Spi::Ctar_set* Spi::set_ctar [2] = {&Spi::C0, &Spi::C1};
+Spi::ctarPtr Spi::set_ctar [2] = {&Spi::C0, &Spi::C1};
 
 Spi::Spi(CTAR_number n, Role r)
 

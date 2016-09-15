@@ -22,6 +22,8 @@
 
 class Spi
 {
+
+
 //variables
 public:
   enum Division {div2 , div4 , div8 , div16 , div32 , div64 , div128 , div256, div512};
@@ -72,8 +74,12 @@ static struct Ctar_set
 	  uint8_t dt;
 	  uint8_t br;
   }C0, C1;
+  using ctarPtr = Spi::Ctar_set*;
 
-static Ctar_set * set_ctar [2];
+  static ctarPtr set_ctar [2];
+
+  //static Ctar_set * set_ctar [2];
+
   /*
   struct
   {
@@ -129,9 +135,9 @@ public:
   uint16_t get_data ();
   bool flag_tcf ();
 
-
-private:
 };
+
+
 
 typedef uint16_t(Spi::*PotMemFn)() ;
 typedef uint16_t(Spi::*ptr_ex)(uint16_t) ;

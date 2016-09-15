@@ -4,6 +4,9 @@
 #include "delay.h"
 #include "pit.h"
 #include "max6675.h"
+#include "buffer.h"
+
+
 
 
 Tact frq;

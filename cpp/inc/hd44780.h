@@ -19,6 +19,9 @@ const uint8_t shift = 0x10;
 const uint8_t display_settings = 0x08;
 
 const uint8_t turn_off_display = 0x08;
+const uint8_t turn_on_display = 0x0C;
+
+
 const uint8_t turn_off_cursor = 0x0C;
 const uint8_t turn_on_blink = 0x0D;
 const uint8_t turn_on_cursor = 0x0E;
@@ -41,6 +44,7 @@ private:
 	enum commPins {RS=4, E=5, RW=6};
 	const char shift_data = 0;
 	const uint8_t D7 = 1 << (shift_data+3);
+	uint8_t position;
 	//uint8_t custom_chars [][8];
 	Gpio pin;
 	unsigned int x_start, x_end, y_start, y_end;
@@ -51,9 +55,9 @@ public:
 	void init ();
 	void tetra (uint8_t t);
 	void command (uint8_t com);
-	void data (uint8_t data);
-	void send_string (uint8_t *str);
-	void send_string (uint8_t n, uint8_t *str);
+	void data (char data) ;
+	void send_string (const char *str) ;
+	void send_string (uint8_t n, const char *str) ;
 	void clear ();
 	void set_position (uint8_t col, uint8_t row);
 	void newChar (uint8_t *ch, uint8_t addr);
@@ -65,7 +69,8 @@ public:
 	void RW_disassert ();
 	void check_busy ();
 	void Shift (Shifter s, Direction d, uint8_t val);
-
+	void set_shift_position (uint8_t pos);
+	uint8_t get_Shift_position ();
 protected:
 private:
 

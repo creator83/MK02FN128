@@ -3,6 +3,8 @@
 #include "tact.h"
 #include "delay.h"
 #include "hd44780.h"
+#include "buffer.h"
+
 
 Tact frq;
 
@@ -19,40 +21,33 @@ uint8_t s [8]
 		   0x1F,
 		   };
 
-struct buf
-{
-	uint8_t array [4];
-	uint8_t n;
-} buffer;
-
-uint8_t number [10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-
-void buff_arr (uint16_t mes, buf * arr);
+const char * menu_iron = "Solder Iron";
+const char * menu_heat_gun = "Heat Gun";
 
 
 int main ()
 {
-	Hd44780 display;
-	buffer.array[3] = '\0';
+	Buffer temp (3);
+		Hd44780 display;
+
 	display.set_position (1,7);
-	display.send_string ((uint8_t*)"mk02fn128");
+	display.send_string ("mk02fn128");
 	display.newChar(s, 0);
 	display.set_position (0,8);
 	display.data(0);
 	delay_ms(2000);
 	display.Shift(Hd44780::Window, Hd44780::Right, 3);
 	display.set_position (0,4);
-	display.send_string ((uint8_t*)"Ha");
+	display.send_string ("Ha");
 	delay_ms(2000);
 	display.command(clear_counter);
-	buff_arr (623, &buffer);
+	temp.pars(356);
+	display.set_position (1,1);
+	display.send_string (temp.getArray());
 	display.set_position (0,1);
-	display.send_string(buffer.n, &buffer.array [0]);
-	display.set_position (1,2);
-	display.send_string(&buffer.array[0]);
-	display.set_position (0,10);
-	display.send_string ((uint8_t*)"623");
+	display.send_string (menu_iron);
+	display.set_position(0, 17);
+	display.send_string (menu_heat_gun);
 
 	while (1)
 	{/*
@@ -63,17 +58,4 @@ int main ()
 	}
 }
 
-void buff_arr (uint16_t mes, buf * arr)
-{
-	char hundr, dec, ones = 0;
-	uint16_t temp = mes;
-	for (hundr=0;temp>=100;++hundr)temp -=100;
 
-	for (dec=0;temp>=10;++dec)temp -=10;
-
-	for (ones=0;temp>=1;++ones)temp--;
-	arr->array[2] = number [ones];
-	arr->array[1] = number [dec];
-	arr->array[0] = number [hundr];
-	arr->n = 3;
-}

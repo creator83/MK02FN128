@@ -6,6 +6,7 @@ Hd44780::Hd44780()
 {
 	pin.settingPort ((0x0F<<shift_data)|1 << RS | 1 << E);
 	init();
+	position=0;
 }
 
 void Hd44780::init ()
@@ -55,7 +56,7 @@ void Hd44780::command (uint8_t b)
 	RW_disassert();
 }
 
-void Hd44780::data (uint8_t b)
+void Hd44780::data (char b)
 {
 	RW_assert();
 	check_busy();
@@ -69,12 +70,12 @@ void Hd44780::data (uint8_t b)
 	RW_disassert();
 }
 
-void Hd44780::send_string (uint8_t *str)
+void Hd44780::send_string (const char *str)
 {
 	while (*str) data (*str++);
 }
 
-void Hd44780::send_string (uint8_t n, uint8_t *str)
+void Hd44780::send_string (uint8_t n, const char *str)
 {
 	for (uint8_t i=0;i<n;++i) data (*str++);
 }
@@ -90,6 +91,8 @@ void Hd44780::set_position (uint8_t col, uint8_t row)
 	uint8_t addr = second_col*col + row;
 	command (addr|set_dram_addr);
 }
+
+
 
 void Hd44780::newChar (uint8_t *ch, uint8_t addr)
 {
@@ -128,9 +131,35 @@ void Hd44780::Shift(Shifter s, Direction d, uint8_t val)
 	{
 		command(shift_);
 	}
-	command(turn_off_cursor);
+	command(turn_on_display);
+	if (d == Left)
+	{
+		uint8_t temp = 40 - position;
+		if (s > (temp))position = s - temp;
+		else position += s;
+	}
+	else
+	{
+
+		if (s > position)
+		{
+			uint8_t temp = s - position;
+			position = 40 - temp;
+		}
+		else position -= s;
+	}
+
+}
+void Hd44780::set_shift_position (uint8_t pos)
+{
+	if (pos<position) Shift(Hd44780::Window, Hd44780::Right, position - pos);
+	if (pos > position) Shift(Hd44780::Window, Hd44780::Left, pos - position);
 }
 
+uint8_t Hd44780::get_Shift_position ()
+{
+	return position;
+}
 
 
 
