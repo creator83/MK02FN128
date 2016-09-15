@@ -6,7 +6,6 @@ Hd44780::Hd44780()
 {
 	pin.settingPort ((0x0F<<shift_data)|1 << RS | 1 << E);
 	init();
-
 }
 
 void Hd44780::init ()
@@ -35,35 +34,49 @@ void Hd44780::init ()
 void Hd44780::tetra (uint8_t t)
 {
 	E_assert ();
-	delay_us (50);
 	pin.clearValPort (0x0F<<shift_data);
 	t &= 0x0F;
 	pin.setValPort(t<<shift_data);
+	delay_us (2);
 	E_disassert ();
-	delay_us (50);
 }
 
 void Hd44780::command (uint8_t b)
 {
+	RW_assert();
+	check_busy();
 	uint8_t hb = 0;
 	hb = b >> 4;
 	RS_disassert ();
 	tetra (hb);
+	delay_us(1);
 	tetra (b);
+	delay_us(1);
+	RW_disassert();
 }
 
 void Hd44780::data (uint8_t b)
 {
+	RW_assert();
+	check_busy();
 	uint8_t hb = 0;
 	hb = b >> 4;
 	RS_assert ();
 	tetra (hb);
+	delay_us(1);
 	tetra (b);
+	delay_us(1);
+	RW_disassert();
 }
 
 void Hd44780::send_string (uint8_t *str)
 {
 	while (*str) data (*str++);
+}
+
+void Hd44780::send_string (uint8_t n, uint8_t *str)
+{
+	for (uint8_t i=0;i<n;++i) data (*str++);
 }
 
 void Hd44780::clear ()
@@ -85,6 +98,38 @@ void Hd44780::newChar (uint8_t *ch, uint8_t addr)
 	//send_byte (set_dram_addr, command);
 }
 
+void Hd44780::check_busy ()
+{
+	pin.settingPinDirection(D7, Gpio::Input);
+	pin.PuPdPin(D7, Gpio::On, Gpio::PullUp);
+	RW_disassert();
+	uint8_t state;
+	do
+	{
+		E_assert();
+		delay_us(2);
+		state = pin.pinState(D7);
+		E_disassert();
+		delay_us(1);
+		E_assert();
+		delay_us(2);
+		E_disassert();
+	}
+	while (state);
+	pin.PuPdPin(D7, Gpio::Off, Gpio::PullUp);
+	pin.settingPinDirection(D7, Gpio::Output);
+}
+
+void Hd44780::Shift(Shifter s, Direction d, uint8_t val)
+{
+	command(turn_off_display);
+	uint8_t shift_= shift|s|d;
+	for (uint8_t i=0;i<val;++i)
+	{
+		command(shift_);
+	}
+	command(turn_off_cursor);
+}
 
 
 

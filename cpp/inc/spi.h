@@ -73,7 +73,7 @@ static struct Ctar_set
 	  uint8_t br;
   }C0, C1;
 
-static Ctar_set * set [2];
+static Ctar_set * set_ctar [2];
   /*
   struct
   {
@@ -110,13 +110,13 @@ public:
   void set_MISO (PORT p, uint8_t pin, Mux m=Alt2);
   void set_cpol (Cpol c = neg);
   void set_cpha (Cpha c = first);
-  void set_f_size (Fsize f);
+  void set_f_size (Fsize f = bit_8);
   void set_baudrate (Division d);
 
 
 
   void settings ();
-  void transmit (uint8_t data);
+  void transmit (uint16_t data);
   uint8_t receive ();
   uint8_t exchange (uint8_t data);
 
@@ -125,8 +125,8 @@ public:
 
   void disassert_CS();
 
-  void put_data (uint8_t data);
-  uint8_t get_data ();
+  void put_data (uint16_t data);
+  uint16_t get_data ();
   bool flag_tcf ();
 
 

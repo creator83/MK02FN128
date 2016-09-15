@@ -2,24 +2,27 @@
 #include "spi.h"
 #include "delay.h"
 
-//#define SPI8
+
+//Defenitions
+
 
 #ifndef MAX6675_H
 #define MAX6675_H
 
-class max6675
+class Max6675
 {
 //variables
 public:
 	char buffer_value[2];
 	static char number [10];
 private:
-  spi spi_ics;
+	enum {CS , SCK, MOSI, MISO};
+	Spi spi0;
 	
 
 //functions
 public:
-	max6675 ();
+	Max6675 ();
 	uint16_t readCelsius();
 	void buffer (uint16_t t);
 };

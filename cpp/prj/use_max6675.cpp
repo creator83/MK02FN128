@@ -3,6 +3,7 @@
 #include "tact.h"
 #include "delay.h"
 #include "pit.h"
+#include "max6675.h"
 
 
 Tact frq;

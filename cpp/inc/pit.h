@@ -26,13 +26,14 @@ public:
 	bool flag_TIF ();
 	void start ();
 	void stop ();
+	void interrupt_enable ();
+	void interrupt_disable ();
 private:
 	void khz_set (uint16_t val);
 	void hz_set (uint16_t val);
 	void ms_set (uint16_t val);
 	void us_set (uint16_t val);
-	void interrupt_enable ();
-	void interrupt_disable ();
+
 
 };
 
