@@ -3,7 +3,8 @@
 #include "tact.h"
 #include "delay.h"
 #include "pit.h"
-
+#include "mcp3551.h"
+#include "shift_registr.h"
 
 Tact frq;
 Spi spi0;
@@ -35,6 +36,7 @@ void PIT1_IRQHandler()
 
 int main ()
 {
+	Shift reg (spi0, Shift::CTAR0);
 	pit1.interrupt_enable();
 	spi0.set_CS(Spi::E, CS, Spi::CS0);
 	spi0.set_SCK(Spi::E, SCK);
@@ -44,13 +46,10 @@ int main ()
 	spi0.set_cpha();
 	spi0.set_cpol();
 	spi0.set_f_size();
+	Mcp3551 m (spi0);
+
 
 	while (1)
 	{
-		/*
-		spi0.put_data(0xF0);
-		delay_ms(1000);
-		spi0.put_data(0x0F);
-		delay_ms(1000);*/
 	}
 }

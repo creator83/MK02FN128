@@ -28,7 +28,7 @@ class Spi
 public:
   enum Division {div2 , div4 , div8 , div16 , div32 , div64 , div128 , div256, div512};
   enum Role {slave , master};
-  enum Cpol {neg, pos};
+  enum Cpol : uint8_t {neg, pos};
   enum Cpha {first, second};
   enum CS_number {CS0, CS1, CS2, CS3, CS4};
   enum CTAR_number {CTAR0, CTAR1};
@@ -37,6 +37,7 @@ public:
   enum Mux {Alt0, Alt1, Alt2, Alt3, Alt4, Alt5, Alt6, Alt7};
   static uint8_t pins_d[4];
   enum PORT {C=2, D, E};
+
 
 
   /*uint8_t CS [2];
@@ -76,7 +77,7 @@ static struct Ctar_set
   }C0, C1;
   using ctarPtr = Spi::Ctar_set*;
 
-  static ctarPtr set_ctar [2];
+  static ctarPtr s_ctar [2];
 
   //static Ctar_set * set_ctar [2];
 
@@ -108,7 +109,7 @@ static struct Ctar_set
 //functions
 public:
 
-  Spi(CTAR_number n = CTAR0, Role r=master);
+  Spi(Role r=master);
 
   void set_CS (PORT p, uint8_t pin, CS_number c, Mux m=Alt2);
   void set_SCK (PORT p, uint8_t pin, Mux m=Alt2);
@@ -118,8 +119,11 @@ public:
   void set_cpha (Cpha c = first);
   void set_f_size (Fsize f = bit_8);
   void set_baudrate (Division d);
+  void set_ctar (uint8_t n);
 
-
+  static void set_cpol (Spi &, Cpol c);
+  static void set_cpha (Spi &, Cpha c);
+  static void set_ctar (Spi &, uint8_t c);
 
   void settings ();
   void transmit (uint16_t data);

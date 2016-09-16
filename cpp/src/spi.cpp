@@ -4,9 +4,26 @@ Spi::Ctar_set Spi::C1;
 Spi::Ctar_set Spi::C0;
 
 //Spi::Ctar_set* Spi::set_ctar [2] = {&Spi::C0, &Spi::C1};
-Spi::ctarPtr Spi::set_ctar [2] = {&Spi::C0, &Spi::C1};
+Spi::ctarPtr Spi::s_ctar [2] = {&Spi::C0, &Spi::C1};
 
-Spi::Spi(CTAR_number n, Role r)
+void Spi::set_cpol (Spi &s, Cpol c)
+{
+	s.set_cpol(c);
+}
+
+void Spi::set_ctar (uint8_t n)
+{
+	ctar_N = n;
+}
+
+void Spi::set_ctar (Spi &s, uint8_t c)
+{
+	s.set_ctar(c);
+}
+
+
+
+Spi::Spi( Role r)
 
 {
   //===Settings pins===//
@@ -18,7 +35,6 @@ Spi::Spi(CTAR_number n, Role r)
 
   //===Settings Spi1===//
   //Settings number CTAR
-  ctar_N = n;
 
   //Settings role
   SPI0->MCR &= ~ SPI_MCR_MSTR_MASK;
@@ -70,25 +86,25 @@ void Spi::set_MISO (PORT p, uint8_t pin, Mux m)
 
 void Spi::set_cpol (Cpol c)
 {
-	set_ctar [ctar_N]->cpol = c;
+	s_ctar [ctar_N]->cpol = c;
 	SPI0_CTAR(ctar_N) = SPI_CTAR_SLAVE_CPOL(c);
 }
 
 void Spi::set_cpha (Cpha c)
 {
-	set_ctar [ctar_N]->cpha = c;
+	s_ctar [ctar_N]->cpha = c;
 	SPI0_CTAR(ctar_N) = SPI_CTAR_SLAVE_CPHA(c);
 }
 
 void Spi::set_f_size (Fsize f)
 {
-	set_ctar [ctar_N]->f_size = f;
+	s_ctar [ctar_N]->f_size = f;
 	SPI0_CTAR(ctar_N) = SPI_CTAR_FMSZ(f);
 }
 
 void Spi::set_baudrate (Division d)
 {
-	set_ctar [ctar_N]->br = d;
+	s_ctar [ctar_N]->br = d;
 	SPI0_CTAR(ctar_N) = SPI_CTAR_BR (d);
 }
 
