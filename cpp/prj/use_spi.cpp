@@ -41,6 +41,7 @@ int main ()
 	reg.set_SCK(Gpio::A, SCK, Gpio::Alt2);
 	reg.set_MOSI(Gpio::A, MOSI, Gpio::Alt2);
 
+
 	pit1.interrupt_enable();
 	pit1.start();
 
