@@ -3,77 +3,84 @@
 #include "tact.h"
 #include "delay.h"
 #include "hd44780.h"
+#include "buffer.h"
+#include "pit.h"
+
 
 Tact frq;
+Pit Stimer(Pit::ch1, 2000, Pit::ms);
+Hd44780 display;
+Buffer temp_iron(3);
+Buffer temp_heat_gun(3);
 
-const uint8_t led = 6;
 
-uint8_t s [8]
-		   { 0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   };
+const uint8_t led = 4;
+const uint16_t val_iron = 230;
+const uint16_t val_gun = 260;
 
-struct buf
+extern "C" {
+	void SysTick_Handler();
+	void PIT1_IRQHandler();
+}
+
+void PIT1_IRQHandler()
 {
-	uint8_t array [4];
-	uint8_t n;
-} buffer;
-
-uint8_t number [10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
-
-void buff_arr (uint16_t mes, buf * arr);
-
-
-int main ()
-{
-	Hd44780 display;
-	buffer.array[3] = '\0';
-	display.set_position (1,7);
-	display.send_string ((uint8_t*)"mk02fn128");
-	display.newChar(s, 0);
-	display.set_position (0,8);
-	display.data(0);
-	delay_ms(2000);
-	display.Shift(Hd44780::Window, Hd44780::Right, 3);
-	display.set_position (0,4);
-	display.send_string ((uint8_t*)"Ha");
-	delay_ms(2000);
-	display.command(clear_counter);
-	buff_arr (623, &buffer);
-	display.set_position (0,1);
-	display.send_string(buffer.n, &buffer.array [0]);
-	display.set_position (1,2);
-	display.send_string(&buffer.array[0]);
-	display.set_position (0,10);
-	display.send_string ((uint8_t*)"623");
-
-	while (1)
-	{/*
-		display.Shift(Hd44780::Window, Hd44780::Left, 3);
-		delay_ms(500);
-		display.Shift(Hd44780::Window, Hd44780::Right, 3);
-		delay_ms(500);*/
+	static bool flag;
+	Stimer.clear_flag();
+	if (flag)
+	{
+		display.Shift(Hd44780::Window, Hd44780::Left, 16);
+		flag = 0;
+	}
+	else
+	{
+		display.command(clear_counter);
+		flag = 1;
 	}
 }
 
-void buff_arr (uint16_t mes, buf * arr)
+
+
+uint8_t new_char0[8]
+{ 0x1F,
+0x1F,
+0x1F,
+0x1F,
+0x1F,
+0x1F,
+0x1F,
+0x1F,
+};
+
+const char * menu_iron = "Solder Iron";
+const char * menu_heat_gun = "Heat Gun";
+
+void menu();
+
+
+int main()
 {
-	char hundr, dec, ones = 0;
-	uint16_t temp = mes;
-	for (hundr=0;temp>=100;++hundr)temp -=100;
+	temp_iron.pars(val_iron);
+	temp_heat_gun.pars(val_gun);
+	menu();
+	Stimer.interrupt_enable();
+	Stimer.start();
 
-	for (dec=0;temp>=10;++dec)temp -=10;
-
-	for (ones=0;temp>=1;++ones)temp--;
-	arr->array[2] = number [ones];
-	arr->array[1] = number [dec];
-	arr->array[0] = number [hundr];
-	arr->n = 3;
+	while (1)
+	{
+	}
 }
+
+void menu()
+{
+	display.set_position(0, 1);
+	display.send_string(menu_iron);
+	display.set_position(1, 1);
+	display.send_string(temp_iron.getArray());
+	display.set_position(0, 17);
+	display.send_string(menu_heat_gun);
+	display.set_position(1, 17);
+	display.send_string(temp_heat_gun.getArray());
+}
+
+

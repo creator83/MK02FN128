@@ -2,27 +2,49 @@
 #include "spi.h"
 #include "tact.h"
 #include "delay.h"
-
+#include "pit.h"
+#include "shift_registr.h"
 
 Tact frq;
+Spi spi0;
+Shift reg (spi0, Spi::CTAR0);
 
-const uint8_t CS   = 16;
-const uint8_t SCK  = 17;
-const uint8_t MOSI = 18;
-const uint8_t MISO = 19;
+Pit pit1 (Pit::ch1, 1000, Pit::ms);
+extern "C" {
+	void PIT1_IRQHandler();
+}
+
+const uint8_t CS   = 4;
+const uint8_t SCK  = 5;
+const uint8_t MOSI = 6;
+
+
+void PIT1_IRQHandler()
+{
+	pit1.clear_flag();
+	static bool flag;
+	if (flag)
+	{
+		reg.send(0x0F);
+		flag = false;
+	}
+	else
+	{
+		reg.send(0xF0);
+		flag = true;
+	}
+}
 
 int main ()
 {
-	Spi spi0;
-	spi0.set_CS(Spi::E, CS, Spi::CS0);
-	spi0.set_SCK(Spi::E, SCK);
-	spi0.set_MOSI(Spi::E, MOSI);
-	spi0.set_MISO(Spi::E, MISO);
-	spi0.set_baudrate(Spi::div16);
+	reg.set_CS (Gpio::A, CS, Gpio::Alt2);
+	reg.set_SCK(Gpio::A, SCK, Gpio::Alt2);
+	reg.set_MOSI(Gpio::A, MOSI, Gpio::Alt2);
 
+	pit1.interrupt_enable();
+	pit1.start();
 
 	while (1)
 	{
-
 	}
 }
