@@ -90,7 +90,7 @@ uint8_t Spi::exchange (uint8_t data)
 
 void Spi::put_data (uint16_t data)
 {
-	SPI0->PUSHR = SPI_PUSHR_PCS(cs_N)|SPI_PUSHR_TXDATA(data);
+	SPI0->PUSHR = SPI_PUSHR_PCS(0)|SPI_PUSHR_TXDATA(data);
 }
 
 uint16_t Spi::get_data ()
