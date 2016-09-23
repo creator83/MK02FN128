@@ -10,21 +10,18 @@
 
 class Shift
 {
-//variables
-public:
-/*	enum CTAR_number: uint8_t {CTAR0, CTAR1};
-	enum Port :uint8_t {A , B , C , D , E};
-	enum mux :uint8_t {Alt2 = 2 , Alt3 , Alt4 , Alt5 , Alt6 , Alt7};*/
 private:
 	Gpio CS, SCK, MOSI, MISO;
 	Spi * mod;
+	uint8_t N_CS;
+	uint8_t N_CTAR;
 
 //functions
 public:
 	Shift (Spi &, Spi::CTAR_number c);
 	void setMode ();
 	void send (uint8_t data);
-	void set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
+	void set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number);
 	void set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
 	void set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
 };

@@ -4,15 +4,14 @@
 #include "delay.h"
 #include "pit.h"
 #include "shift_registr.h"
-#include "list.h"
-#include "buffer.h"
+
 
 Tact frq;
 Spi spi0;
 Shift reg (spi0, Spi::CTAR0);
-//List functions;
 
-Pit pit1 (Pit::ch1, 1000, Pit::ms);
+
+Pit pit1 (Pit::ch1, 300, Pit::ms);
 extern "C" {
 	void PIT1_IRQHandler();
 }
@@ -38,23 +37,28 @@ void PIT1_IRQHandler()
 	}
 }
 
-void send_shift ();
+//void send_shift ();
 
 int main ()
 {
-	reg.set_CS (Gpio::E, CS, Gpio::Alt2);
+
+	reg.set_CS (Gpio::E, CS, Gpio::Alt2, Spi::CS0);
 	reg.set_SCK(Gpio::E, SCK, Gpio::Alt2);
 	reg.set_MOSI(Gpio::E, MOSI, Gpio::Alt2);
-	//functions.addToHead(send_shift, 1000);
+
 
 	pit1.interrupt_enable();
 	pit1.start();
 
 	while (1)
 	{
+		/*reg.send(0xF0);
+		delay_ms(500);
+		reg.send(0x0F);
+		delay_ms(500);*/
 	}
 }
-
+/*
 void send_shift ()
 {
 	static bool flag;
@@ -69,4 +73,4 @@ void send_shift ()
 		flag = true;
 	}
 
-}
+}*/

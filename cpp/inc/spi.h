@@ -32,6 +32,7 @@ public:
   enum Cpha : uint8_t {first, second};
   enum CS_number : uint8_t {CS0, CS1, CS2, CS3, CS4};
   enum CTAR_number : uint8_t {CTAR0, CTAR1};
+  enum State : bool {off, on};
   enum Fsize {bit_4=3, bit_5, bit_6, bit_7, bit_8, bit_9, bit_10, bit_11, bit_12, bit_13, bit_14, bit_15, bit_16};
 
 private:
@@ -55,7 +56,6 @@ static struct Ctar_set
   using ctarPtr = Spi::Ctar_set*;
 
   static ctarPtr s_ctar [2];
-	uint8_t cs_N;
 	uint8_t ctar_N;
 
 //functions
@@ -68,22 +68,25 @@ public:
   void set_f_size (Fsize f = bit_8);
   void set_baudrate (Division d);
   void set_ctar (uint8_t n);
+  void update_ctar ();
 
   static void set_cpol (Spi &, Cpol c);
   static void set_cpha (Spi &, Cpha c);
   static void set_ctar (Spi &, uint8_t c);
   static void set_baudrate (Spi &, Division d);
+  static void set_f_size (Spi &, Fsize f = bit_8);
 
   void settings ();
   void transmit (uint16_t data);
   uint8_t receive ();
   uint8_t exchange (uint8_t data);
 
-  void put_data (uint16_t data);
+  void put_data (uint16_t data, uint8_t cs, uint8_t ctar);
   uint16_t get_data ();
   bool flag_tcf ();
   bool flag_tfff ();
   bool flag_tfuf ();
+  void clear_flag_tcf();
 };
 
 
