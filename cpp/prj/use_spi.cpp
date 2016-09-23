@@ -5,6 +5,7 @@
 #include "pit.h"
 #include "shift_registr.h"
 #include "list.h"
+#include "buffer.h"
 
 Tact frq;
 Spi spi0;
@@ -44,7 +45,6 @@ int main ()
 	reg.set_CS (Gpio::E, CS, Gpio::Alt2);
 	reg.set_SCK(Gpio::E, SCK, Gpio::Alt2);
 	reg.set_MOSI(Gpio::E, MOSI, Gpio::Alt2);
-
 	//functions.addToHead(send_shift, 1000);
 
 	pit1.interrupt_enable();

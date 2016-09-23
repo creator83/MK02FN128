@@ -5,7 +5,7 @@ const uint8_t Buffer::Array_char [10] = {'0', '1', '2', '3', '4', '5', '6', '7',
 
 Buffer::Buffer(uint8_t size)
 {
-	arr = new char [size+1];
+	arr [size+1];
 	n= size+1;
 	arr[size] = '\0';
 	//uint8_t *ptr = new
@@ -13,7 +13,6 @@ Buffer::Buffer(uint8_t size)
 
 Buffer::~Buffer()
 {
-	delete [] arr;
 }
 
 uint8_t Buffer::getArraySize ()

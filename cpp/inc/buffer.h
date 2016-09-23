@@ -4,7 +4,6 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-
 class Buffer
 {
 public:
@@ -12,7 +11,7 @@ public:
 private:
 	uint8_t n;
 	uint8_t count;
-	char * arr;
+	char arr [];
 public:
 	Buffer(uint8_t size);
 	void pars (const uint16_t &);
