@@ -2,17 +2,13 @@
 
 List::List()
 {
-	tail = new Item;
 	head = new Item;
-	tail = nullptr;
-	head->next = nullptr;
+	head = nullptr;
 }
 
 List::~List()
 {
-	delete tail;
 	delete head;
-
 }
 
 List::Item::Item (void (*f)(), uint16_t p)
@@ -32,18 +28,20 @@ List::Item::~Item ()
 	delete next;
 }
 
-void List::addToHead (void (*f)(), uint16_t p_)
+void List::addItem (void (*f)(), uint16_t p_)
 {
 	Item * i = new Item (f, p_);
-	i->next = head->next;
-	head->next = i;
+	i->next = head;
+	head = i;
 }
 
-void List::addToTail (void (*f)(), uint16_t p_)
+void List::itarate ()
 {
-	Item * i = new Item (f, p_);
-	i->next = head->next;
-	head->next = i;
+	Item * current = new Item;
+	current = head;
+	while (current != nullptr)
+	{
+		//some actions
+		current = current->next;
+	}
 }
-
-

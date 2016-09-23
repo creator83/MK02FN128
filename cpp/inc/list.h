@@ -17,12 +17,11 @@ public:
 	};
 private:
 	Item * head;
-	Item * tail;
 public:
 	List();
 	~List();
-	void addToHead (void (*f)(), uint16_t p_);
-	void addToTail (void (*f)(), uint16_t p_);
+	void addItem (void (*f)(), uint16_t p_);
+	void itarate ();
 	//void addToHead ()
 
 };
