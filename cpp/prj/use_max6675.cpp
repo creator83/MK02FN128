@@ -5,13 +5,16 @@
 #include "pit.h"
 #include "max6675.h"
 #include "buffer.h"
+#include "hd44780.h"
 
 
 
 
 Tact frq;
 Spi spi0;
-Pit pit1 (Pit::ch1, 1000, Pit::ms);
+Pit pit1 (Pit::ch1, 500, Pit::ms);
+Max6675 sensor (spi0, Spi::CTAR0);
+
 extern "C" {
 	void PIT1_IRQHandler();
 }
@@ -24,30 +27,18 @@ const uint8_t MISO = 19;
 void PIT1_IRQHandler()
 {
 	pit1.clear_flag();
-	static bool flag;
-	if (flag)
-	{
-		spi0.put_data(0xF0);
-		flag = false;
-	}
-	else
-	{
-		spi0.put_data(0x0F);
-		flag = true;
-	}
+	sensor.readCelsius();
 }
 
 int main ()
 {
+
 	pit1.interrupt_enable();
-	spi0.set_CS(Spi::E, CS, Spi::CS0);
-	spi0.set_SCK(Spi::E, SCK);
-	spi0.set_MOSI(Spi::E, MOSI);
-	spi0.set_MISO(Spi::E, MISO);
-	spi0.set_baudrate(Spi::div16);
-	spi0.set_cpha();
-	spi0.set_cpol();
-	spi0.set_f_size();
+	sensor.set_CS (Gpio::E, CS, Gpio::Alt2, Spi::CS0);
+	sensor.set_SCK (Gpio::E, SCK, Gpio::Alt2);
+	sensor.set_MOSI (Gpio::E, MOSI, Gpio::Alt2);
+	sensor.set_MISO (Gpio::E, MISO, Gpio::Alt2);
+
 
 	while (1)
 	{

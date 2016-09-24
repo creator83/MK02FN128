@@ -11,7 +11,7 @@ Spi spi0;
 Shift reg (spi0, Spi::CTAR0);
 
 
-Pit pit1 (Pit::ch1, 300, Pit::ms);
+Pit pit1 (Pit::ch1, 500, Pit::ms);
 extern "C" {
 	void PIT1_IRQHandler();
 }

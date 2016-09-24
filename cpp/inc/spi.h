@@ -86,7 +86,15 @@ public:
   bool flag_tcf ();
   bool flag_tfff ();
   bool flag_tfuf ();
+  bool flag_txctr ();
+  bool flag_rfof ();
+  bool flag_rfdf ();
   void clear_flag_tcf();
+  void clear_flag_tfuf();
+  void clear_flag_rfof();
+  void clear_flag_rfdf();
+
+
 };
 
 

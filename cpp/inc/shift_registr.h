@@ -11,7 +11,7 @@
 class Shift
 {
 private:
-	Gpio CS, SCK, MOSI, MISO;
+	Gpio CS, SCK, MOSI;
 	Spi * mod;
 	uint8_t N_CS;
 	uint8_t N_CTAR;

@@ -1,57 +1,70 @@
 #include "max6675.h"
 
 
-char Max6675::number [10] = {'0','1','2','3','4','5','6','7','8','9'};
 
-Max6675::Max6675 ()
-:spi0 (Spi::CTAR1)
+
+Max6675::Max6675 (Spi &s, Spi::CTAR_number c)
 {
-	spi0.set_CS(Spi::D, CS, Spi::CS0);
-	spi0.set_SCK(Spi::E, SCK);
-	spi0.set_MOSI(Spi::E, MOSI);
-	spi0.set_MISO(Spi::E, MISO);
-	spi0.set_baudrate(Spi::div32);
-	spi0.set_cpol();
-	spi0.set_cpha(Spi::second);
-	spi0.set_f_size(Spi::bit_16);
+	mod = &s;
+	N_CTAR = c;
+	Spi::set_ctar(*mod, c);
+	setMode();
 }
 
-uint16_t Max6675::readCelsius()
+void Max6675::setMode ()
 {
-	/*union
-	{
-		uint16_t full_val;
-		uint8_t half_val[2];
-	}val;*/
-	uint16_t val;
-	spi0.put_data(0);
-	while (!spi0.flag_tcf());
-	val = spi0.get_data();
+	Spi::set_cpha(*mod, Spi::second);
+	Spi::set_cpol(*mod, Spi::neg);
+	Spi::set_baudrate(*mod, Spi::div32);
+	Spi::set_f_size(*mod, Spi::bit_16);
+}
 
-
-	if (val & 0x4)
+bool Max6675::readCelsius()
+{
+	mod->put_data(0, N_CS, N_CTAR);
+	while (!mod->flag_rfof());
+	byte_code = mod->get_data();
+	while (!mod->flag_tcf());
+	mod->clear_flag_tcf();
+	mod->clear_flag_rfof();
+	if (byte_code & 0x4)
 	  {
     // uh oh, no thermocouple attached!
-    return 0; 
+    return false;
     //return -100;
   }
-	val *=10;
-	return val>>=5;;
+	byte_code *=10;
+	byte_code>>=5;
+	return true;
 }
 
-
-
-void Max6675::buffer (uint16_t t)
+void Max6675::set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number n)
 {
-	char dec, ones;
-	uint16_t temp = t;
-	
-	for (dec=0;temp>=10;++dec)temp -=10;
-
-	for (ones=0;temp>=1;++ones)temp--;
-	
-	buffer_value [0]= number [dec];
-	buffer_value [1]= number [ones];
+	CS.settingPinPort(p);
+	CS.settingPin(pin, m);
+	N_CS = n;
+	SPI0->MCR |= SPI_MCR_PCSIS(1<<N_CS);
 }
 
+void Max6675::set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	SCK.settingPinPort(p);
+	SCK.settingPin(pin, m);
+}
 
+void Max6675::set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	MOSI.settingPinPort(p);
+	MOSI.settingPin(pin, m);
+}
+
+void Max6675::set_MISO (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	MISO.settingPinPort(p);
+	MISO.settingPin(pin, m);
+}
+
+uint16_t & Max6675::getTemp ()
+{
+	return byte_code;
+}

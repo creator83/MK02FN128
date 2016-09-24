@@ -111,7 +111,7 @@ void Spi::put_data (uint16_t data, uint8_t cs, uint8_t ctar)
 
 uint16_t Spi::get_data ()
 {
-	return  SPI0->POPR; //(uint16_t)
+	return SPI0->POPR;
 }
 
 bool Spi::flag_tcf ()
@@ -129,8 +129,37 @@ bool Spi::flag_tfuf ()
 	return SPI0->SR&SPI_SR_TFUF_MASK;
 }
 
+bool Spi::flag_txctr ()
+{
+	return SPI0->SR&SPI_SR_TXCTR_MASK;
+}
+
+bool Spi::flag_rfof ()
+{
+	return SPI0->SR&SPI_SR_RFOF_MASK;
+}
+
+bool Spi::flag_rfdf ()
+{
+	return SPI0->SR&SPI_SR_RFDF_MASK;
+}
+
 void Spi::clear_flag_tcf()
 {
 	SPI0->SR |= SPI_SR_TCF_MASK;
 }
 
+void Spi::clear_flag_tfuf()
+{
+	SPI0->SR |= SPI_SR_TFUF_MASK;
+}
+
+void Spi::clear_flag_rfof()
+{
+	SPI0->SR |= SPI_SR_RFOF_MASK;
+}
+
+void Spi::clear_flag_rfdf()
+{
+	SPI0->SR |= SPI_SR_RFDF_MASK;
+}

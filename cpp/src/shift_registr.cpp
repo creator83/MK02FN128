@@ -13,7 +13,7 @@ void Shift::setMode ()
 {
 	Spi::set_cpha(*mod, Spi::first);
 	Spi::set_cpol(*mod, Spi::neg);
-	Spi::set_baudrate(*mod, Spi::div8);
+	Spi::set_baudrate(*mod, Spi::div2);
 	Spi::set_f_size(*mod);
 }
 
