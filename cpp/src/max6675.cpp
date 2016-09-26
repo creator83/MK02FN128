@@ -22,11 +22,12 @@ void Max6675::setMode ()
 bool Max6675::readCelsius()
 {
 	mod->put_data(0, N_CS, N_CTAR);
-	while (!mod->flag_rfof());
-	byte_code = mod->get_data();
+	//while (!mod->flag_rfdf());
+
 	while (!mod->flag_tcf());
+	byte_code = mod->get_data();
 	mod->clear_flag_tcf();
-	mod->clear_flag_rfof();
+	//mod->clear_flag_rfdf();
 	if (byte_code & 0x4)
 	  {
     // uh oh, no thermocouple attached!

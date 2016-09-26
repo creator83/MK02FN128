@@ -7,12 +7,8 @@ Buffer::Buffer(uint8_t size)
 {
 	arr [size+1];
 	n= size+1;
-	arr[size] = '\0';
+	arr[size] = 0;
 	//uint8_t *ptr = new
-}
-
-Buffer::~Buffer()
-{
 }
 
 uint8_t Buffer::getArraySize ()
@@ -30,13 +26,12 @@ void Buffer::pars (const uint16_t & val)
 	for (dec=0;temp>=10;++dec, ++count)temp -=10;
 	ones = temp%10;
 	++count;
-	if (tous==0)
-	{
-		arr [0] = Array_char [hundr];
-		arr [1] = Array_char [dec];
-		arr [2] = Array_char [ones];
-		arr [3] = 0;
-	}
+		arr [0] = Array_char [tous];
+		arr [1] = Array_char [hundr];
+		arr [2] = Array_char [dec];
+		arr [3] = Array_char [dec];
+		arr [n-1] = 0;
+
 	/*arr [0] = Array_char [tous];
 	arr [1] = Array_char [hundr];
 	arr [2] = Array_char [dec];

@@ -19,7 +19,6 @@ public:
 	uint8_t getArraySize ();
 	char * getArray ();
 	char * getElement (uint8_t n);
-	~Buffer();
 };
 
 	

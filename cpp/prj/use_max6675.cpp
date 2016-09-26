@@ -12,8 +12,22 @@
 
 Tact frq;
 Spi spi0;
-Pit pit1 (Pit::ch1, 500, Pit::ms);
+Pit pit1 (Pit::ch1, 1, Pit::ms);
 Max6675 sensor (spi0, Spi::CTAR0);
+Hd44780 display;
+Buffer temp (4);
+
+const char char_celsium [8]=
+{
+	0x18,
+	0x18,
+	0x00,
+	0x0F,
+	0x09,
+	0x08,
+	0x09,
+	0x0F
+};
 
 extern "C" {
 	void PIT1_IRQHandler();
@@ -28,24 +42,31 @@ void PIT1_IRQHandler()
 {
 	pit1.clear_flag();
 	sensor.readCelsius();
+	temp.pars(sensor.getTemp());
+	display.set_position(1, 1);
+	display.send_string(3,temp.getArray());
 }
 
 int main ()
 {
-
-	pit1.interrupt_enable();
 	sensor.set_CS (Gpio::E, CS, Gpio::Alt2, Spi::CS0);
 	sensor.set_SCK (Gpio::E, SCK, Gpio::Alt2);
 	sensor.set_MOSI (Gpio::E, MOSI, Gpio::Alt2);
 	sensor.set_MISO (Gpio::E, MISO, Gpio::Alt2);
-
+	display.set_position(0, 1);
+	display.send_string("Heat Gun");
+	display.newChar(char_celsium, 0);
+	display.set_position(1, 4);
+	display.data(0);
+	/*pit1.interrupt_enable();
+	pit1.start();*/
 
 	while (1)
 	{
-		/*
-		spi0.put_data(0xF0);
-		delay_ms(1000);
-		spi0.put_data(0x0F);
-		delay_ms(1000);*/
+		sensor.readCelsius();
+		temp.pars(sensor.getTemp());
+		display.set_position(1, 1);
+		display.send_string(3,temp.getArray());
+		delay_ms(500);
 	}
 }

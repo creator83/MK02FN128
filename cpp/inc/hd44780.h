@@ -60,7 +60,7 @@ public:
 	void send_string (uint8_t n, const char *str) ;
 	void clear ();
 	void set_position (uint8_t col, uint8_t row);
-	void newChar (uint8_t *ch, uint8_t addr);
+	void newChar (const char *ch, uint8_t addr);
 	void RS_assert ();
 	void RS_disassert ();
 	void E_assert ();
