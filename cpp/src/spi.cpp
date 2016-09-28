@@ -1,4 +1,4 @@
-#include "Spi.h"
+#include "spi.h"
 
 Spi::Ctar_set Spi::C1;
 Spi::Ctar_set Spi::C0;
