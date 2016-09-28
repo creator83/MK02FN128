@@ -2,8 +2,24 @@
 #include "spi.h"
 #include "gpio.h"
 
-//Defenitions
+namespace ShiftDef
+{
+//===Defenitions===//
+//CS
+const Gpio::Port CsPort = Gpio::C;
+const uint8_t CsPin = 0;
+const Spi::CS_number CsNumber = Spi::CS4;
 
+//SCK
+const Gpio::Port SckPort = Gpio::E;
+const uint8_t SckPin = 17;
+
+//MOSI
+const Gpio::Port MosiPort = Gpio::E;
+const uint8_t MosiPin = 18;
+
+const Spi::CTAR_number CtarNumber = Spi::CTAR1;
+}
 
 #ifndef SHIFT_REGISTR_H
 #define SHIFT_REGISTR_H
@@ -13,16 +29,11 @@ class Shift
 private:
 	Gpio CS, SCK, MOSI;
 	Spi * mod;
-	uint8_t N_CS;
-	uint8_t N_CTAR;
 
 //functions
 public:
-	Shift (Spi &, Spi::CTAR_number c);
+	Shift (Spi &);
 	void setMode ();
 	void send (uint8_t data);
-	void set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number);
-	void set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
-	void set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
 };
 #endif

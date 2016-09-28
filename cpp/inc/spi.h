@@ -54,7 +54,7 @@ static struct Ctar_set
 	  uint8_t br;
   }C0, C1;
   using ctarPtr = Spi::Ctar_set*;
-
+  Gpio Cs, Sck, Mosi, Miso;
   static ctarPtr s_ctar [2];
 	uint8_t ctar_N;
 
@@ -75,6 +75,11 @@ public:
   static void set_ctar (Spi &, uint8_t c);
   static void set_baudrate (Spi &, Division d);
   static void set_f_size (Spi &, Fsize f = bit_8);
+
+  void set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number);
+  void set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
+  void set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
+  void set_MISO (Gpio::Port p, const uint8_t & pin, Gpio::mux m);
 
   void settings ();
   void transmit (uint16_t data);

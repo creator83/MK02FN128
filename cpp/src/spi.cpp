@@ -1,4 +1,4 @@
-#include "Spi.h"
+#include "spi.h"
 
 Spi::Ctar_set Spi::C1;
 Spi::Ctar_set Spi::C0;
@@ -86,6 +86,32 @@ void Spi::set_baudrate (Division d)
 	SPI0_CTAR(ctar_N) |= SPI_CTAR_BR (d);
 }
 
+
+void Spi::set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number n)
+{
+	Cs.settingPinPort(p);
+	Cs.settingPin(pin, m);
+	SPI0->MCR |= SPI_MCR_PCSIS(1<<n);
+}
+
+void Spi::set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	Sck.settingPinPort(p);
+	Sck.settingPin(pin, m);
+
+}
+
+void Spi::set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	Miso.settingPinPort(p);
+	Miso.settingPin(pin, m);
+}
+
+void Spi::set_MISO (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
+{
+	Mosi.settingPinPort(p);
+	Mosi.settingPin(pin, m);
+}
 
 void Spi::transmit (uint16_t data)
 {

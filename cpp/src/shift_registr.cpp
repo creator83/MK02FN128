@@ -1,49 +1,39 @@
 #include "shift_registr.h"
 
 
-Shift::Shift(Spi &s, Spi::CTAR_number c)
+Shift::Shift(Spi &s)
 {
 	mod = &s;
-	N_CTAR = c;
-	Spi::set_ctar(*mod, c);
+	mod->set_ctar(ShiftDef::CtarNumber);
 	setMode();
 }
 
 void Shift::setMode ()
 {
-	Spi::set_cpha(*mod, Spi::first);
-	Spi::set_cpol(*mod, Spi::neg);
-	Spi::set_baudrate(*mod, Spi::div2);
-	Spi::set_f_size(*mod);
+	//===settings GPIO===//
+	//CS
+	mod->set_CS(ShiftDef::CsPort, ShiftDef::CsPin, Gpio::Alt2, ShiftDef::CsNumber);
+
+	//SCK
+	mod->set_SCK(ShiftDef::SckPort, ShiftDef::SckPin, Gpio::Alt2);
+
+	//MOSI
+	mod->set_MOSI(ShiftDef::MosiPort, ShiftDef::MosiPin, Gpio::Alt2);
+
+	//settings SPI
+	mod->set_cpha(Spi::first);
+	mod->set_cpol(Spi::neg);
+	mod->set_baudrate(Spi::div8);
+	mod->set_f_size(Spi::bit_8);
 }
 
 void Shift::send (uint8_t data)
 {
-	mod->put_data(data, N_CS, N_CTAR);
+	mod->put_data(data, ShiftDef::CsNumber, ShiftDef::CtarNumber);
 	while (!mod->flag_tcf());
 	mod->clear_flag_tcf();
 }
 
-void Shift::set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number n)
-{
-	CS.settingPinPort(p);
-	CS.settingPin(pin, m);
-	N_CS = n;
-	SPI0->MCR |= SPI_MCR_PCSIS(1<<N_CS);
-}
-
-void Shift::set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
-{
-	SCK.settingPinPort(p);
-	SCK.settingPin(pin, m);
-
-}
-
-void Shift::set_MOSI (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
-{
-	MOSI.settingPinPort(p);
-	MOSI.settingPin(pin, m);
-}
 
 
 
