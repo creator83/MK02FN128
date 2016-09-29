@@ -12,8 +12,8 @@
  CS1-4, CS2-5, CS3-6
 */
 
-#ifndef Spi_H
-#define Spi_H
+#ifndef SPI_H
+#define SPI_H
 
 
 //typedef (Ctar_set*) Spi::setptr;
