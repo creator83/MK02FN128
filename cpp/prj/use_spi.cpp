@@ -8,7 +8,7 @@
 
 Tact frq;
 Spi spi0;
-Shift reg (spi0, Spi::CTAR0);
+Shift reg (spi0);
 
 
 Pit pit1 (Pit::ch1, 500, Pit::ms);
@@ -41,11 +41,6 @@ void PIT1_IRQHandler()
 
 int main ()
 {
-
-	reg.set_CS (Gpio::E, CS, Gpio::Alt2, Spi::CS0);
-	reg.set_SCK(Gpio::E, SCK, Gpio::Alt2);
-	reg.set_MOSI(Gpio::E, MOSI, Gpio::Alt2);
-
 
 	pit1.interrupt_enable();
 	pit1.start();

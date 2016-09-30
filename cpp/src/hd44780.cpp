@@ -94,7 +94,7 @@ void Hd44780::set_position (uint8_t col, uint8_t row)
 
 
 
-void Hd44780::newChar (uint8_t *ch, uint8_t addr)
+void Hd44780::newChar (const char *ch, uint8_t addr)
 {
 	command ((set_cgram_addr+addr*8));
 	for (uint8_t i=0;i<8;++i, ch++) data (*ch);
