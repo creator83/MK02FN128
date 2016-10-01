@@ -20,6 +20,21 @@ void  Ftm::setDivision (division div)
 	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_PS(div);
 }
 
+void setPeriod (uint16_t &val)
+{
+
+}
+
+void setVal (uint16_t &val)
+{
+
+}
+
+void setInitVal (uint16_t &val)
+{
+
+}
+
 void Ftm::start ()
 {
 	//TPM_SC_REG(tpm_ptr [num_tpm]) |= TPM_SC_CMOD(1);

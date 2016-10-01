@@ -25,7 +25,10 @@ private:
 
 public:
 	Ftm (nFtm n_, channel ch, sourceClock s = System_clk);
-	void setDivision (division div);
+	void setDivision (division & div);
+	void setPeriod (uint16_t &);
+	void setVal (uint16_t &);
+	void setInitVal (uint16_t &);
 	void clear_flag ();
 	void start ();
 	void stop ();

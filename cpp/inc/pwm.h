@@ -23,10 +23,7 @@ private:
 
 public:
 	Pwm (nFtm n_, channel ch);
-	void setModulo (uint16_t val);
-	void setDivision (division d);
-	void setCount (uint16_t val);
-	void clear_flag ();
+	void clearFlag ();
 	void start ();
 	void stop ();
 
