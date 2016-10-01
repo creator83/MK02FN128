@@ -17,6 +17,7 @@ public:
 
 
 private:
+protected:
 	channel num_ch;
 	nFtm num_ftm;
 	sourceClock s_clock;
@@ -24,11 +25,12 @@ private:
 
 
 public:
-	Ftm (nFtm n_, channel ch, sourceClock s = System_clk);
-	void setDivision (division & div);
-	void setPeriod (uint16_t &);
-	void setVal (uint16_t &);
-	void setInitVal (uint16_t &);
+	Ftm (nFtm n_, sourceClock s = System_clk);
+	void setChannel (channel & ch);
+	void setDivision (division div);
+	void setPeriod (const uint16_t &);
+	void setChannelValue (const uint16_t &);
+	void setInitValue (uint16_t &);
 	void clear_flag ();
 	void start ();
 	void stop ();

@@ -1,17 +1,20 @@
 #include "ftm.h"
 
-//FTM_MemMapPtr Ftm::ftm_ptr[3]={FTM0_BASE_PTR, FTM1_BASE_PTR, FTM2_BASE_PTR};
-
 FTM_MemMapPtr Ftm::ftm_ptr[3]={FTM0, FTM1, FTM2};
 
 
-Ftm::Ftm (N_FTM n_, channel ch, source_clock s)
+Ftm::Ftm (nFtm n_, sourceClock s)
 {
-	SIM->SCGC6 |= 1 << (24+n_);
+	SIM->SCGC6 |= 1 << (SIM_SCGC6_FTM0_SHIFT+n_);
+	FTM_MODE_REG(ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK;
 	num_ftm = n_;
-	n_ch = ch;
+	s_clock = s;
 	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~FTM_SC_CLKS_MASK;
-	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_CLKS(s);
+}
+
+void Ftm::setChannel (channel & ch)
+{
+	num_ch = ch;
 }
 
 void  Ftm::setDivision (division div)
@@ -20,28 +23,29 @@ void  Ftm::setDivision (division div)
 	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_PS(div);
 }
 
-void setPeriod (uint16_t &val)
+void Ftm::setPeriod (const uint16_t &val)
 {
-
+	FTM_MOD_REG(ftm_ptr[num_ftm]) = val;
 }
 
-void setVal (uint16_t &val)
+void Ftm::setChannelValue (const uint16_t &val)
 {
-
+	FTM_CnV_REG(ftm_ptr[num_ftm], num_ch) = val;
 }
 
-void setInitVal (uint16_t &val)
+void Ftm::setInitValue (uint16_t &val)
 {
+	FTM_CNTIN_REG(ftm_ptr[num_ftm]) = val;
 
 }
 
 void Ftm::start ()
 {
-	//TPM_SC_REG(tpm_ptr [num_tpm]) |= TPM_SC_CMOD(1);
+	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_CLKS(s_clock);
 }
 
 void Ftm::stop ()
 {
-	//TPM_SC_REG(tpm_ptr [num_tpm]) &= ~TPM_SC_CMOD_MASK;
+	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~FTM_SC_CLKS_MASK;
 }
 
