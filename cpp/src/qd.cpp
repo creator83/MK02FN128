@@ -21,7 +21,7 @@ void Qd::setMode ()
 	pha.settingPinPort(QdDef::PhbPort);
 	pha.settingPin(QdDef::PhbPin, QdDef::PhbAlt);
 
-	//===Settings timer===
+	//===Settings timer===//
 	FTM_SC_REG(ftm_ptr[num_ftm]) = 0;
 	setPeriod(20);
 	FTM_CNTIN_REG(ftm_ptr[num_ftm]) = 0;
