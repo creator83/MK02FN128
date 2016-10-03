@@ -19,14 +19,14 @@ namespace QdDef
 //===Defenitions===//
 const Ftm::nFtm N = Ftm::FTM_1;
 //PHA
-const Gpio::Port PhaPort = Gpio::A;
-const Gpio::mux PhaAlt = Gpio::Alt7;
-const uint8_t PhaPin = 12;
+const Gpio::Port PhaPort = Gpio::B;
+const Gpio::mux PhaAlt = Gpio::Alt6;
+const uint8_t PhaPin = 0;
 
 //PHB
-const Gpio::Port PhbPort = Gpio::A;
-const Gpio::mux PhbAlt = Gpio::Alt7;
-const uint8_t PhbPin = 13;
+const Gpio::Port PhbPort = Gpio::B;
+const Gpio::mux PhbAlt = Gpio::Alt6;
+const uint8_t PhbPin = 1;
 
 
 }
