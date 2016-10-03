@@ -37,9 +37,10 @@ private:
 
 public:
 	Pwm (nFtm n_, channel ch, mode, pulseMode);
-	void setMode ();
+
 
 private:
+	void setMode ();
 	void setEdgePwm (pulseMode m);
 	void setCenterPwm ();
 	void setCombinePwm ();

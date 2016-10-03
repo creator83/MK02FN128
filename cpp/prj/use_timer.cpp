@@ -50,7 +50,7 @@ int main ()
 
 void initPwm ()
 {
-	led_pwm.setDivision(Pwm::div1);
+	led_pwm.setDivision(Pwm::div4);
 	led_pwm.setPeriod(period);
 	led_pwm.setChannelValue(duty);
 	led_pwm.start();

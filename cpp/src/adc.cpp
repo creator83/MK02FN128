@@ -27,8 +27,8 @@ adc::adc(channel ch_, resolution r_)
 	ADC0->SC3 |= ADC_SC3_CAL_MASK ;
 	while (!(ADC0->SC1[0]&ADC_SC1_COCO_MASK));
 	//Settings pins
-	pin.setPort (pin_def [n_channel][0]);
-	pin.setOutPin (pin_def [n_channel][1], 0);
+	/*pin.setPort (pin_def [n_channel][0]);
+	pin.setOutPin (pin_def [n_channel][1], 0);*/
 	ADC0->CFG1|= ADC_CFG1_ADLSMP_MASK|ADC_CFG1_MODE(r_);
 }
 
