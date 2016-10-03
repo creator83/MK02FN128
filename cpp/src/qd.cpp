@@ -1,8 +1,12 @@
 #include "qd.h"
 
-Qd::Qd ()
+
+
+
+Qd::Qd (uint16_t range)
 :Ftm (QdDef::N)
 {
+	high = range;
 	setMode ();
 }
 
@@ -27,4 +31,21 @@ void Qd::setMode ()
 	FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK|FTM_MODE_FTMEN_MASK;
 	interruptEnable();
 	start ();
+}
+
+uint16_t Qd::getValue ()
+{
+	clearTof();
+	value = FTM_CNT_REG (ftm_ptr[num_ftm]);
+	if (value>high)
+	{
+		value = high;
+		FTM_CNT_REG (ftm_ptr[num_ftm]) = high;
+	}
+	return value;
+}
+
+void Qd::setRange (uint16_t r)
+{
+
 }

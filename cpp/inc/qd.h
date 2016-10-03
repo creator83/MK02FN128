@@ -27,13 +27,15 @@ const uint8_t PhaPin = 12;
 const Gpio::Port PhbPort = Gpio::A;
 const Gpio::mux PhbAlt = Gpio::Alt7;
 const uint8_t PhbPin = 13;
+
+
 }
 
 
 
 
-#ifndef PWM_H
-#define PWM_H
+#ifndef QD_H
+#define QD_H
 
 
 class Qd : public Ftm
@@ -43,14 +45,16 @@ public:
 
 private:
 	Gpio pha, phb;
-
+	uint16_t high;
+	uint16_t value;
 
 public:
-	Qd ();
-	void setMode ();
+	Qd (uint16_t range);
+	uint16_t getValue ();
+	void setRange (uint16_t r);
 
 private:
-
+	void setMode ();
 };
 
 

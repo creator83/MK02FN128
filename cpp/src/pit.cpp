@@ -54,7 +54,7 @@ void Pit::stop ()
 void Pit::interrupt_enable ()
 {
 	PIT->CHANNEL[n_ch].TCTRL |= PIT_TCTRL_TIE_MASK;
-	 NVIC->ISER[(((uint32_t)(int32_t)(irq_n+n_ch)) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)(irq_n+n_ch)) & 0x1FUL));
+	NVIC->ISER[(((uint32_t)(int32_t)(irq_n+n_ch)) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)(int32_t)(irq_n+n_ch)) & 0x1FUL));
 }
 
 void Pit::interrupt_disable ()

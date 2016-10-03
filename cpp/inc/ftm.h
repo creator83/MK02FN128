@@ -22,6 +22,7 @@ protected:
 	nFtm num_ftm;
 	sourceClock s_clock;
 	static FTM_MemMapPtr ftm_ptr[3];
+	static IRQn n_interrupt [3];
 
 
 public:
@@ -31,8 +32,9 @@ public:
 	void setPeriod (const uint16_t &);
 	void setChannelValue (const uint16_t &);
 	void setInitValue (uint16_t &);
-	void clearTofFlag ();
+	void clearTof ();
 	void interruptEnable ();
+	void interruptDisable ();
 	void start ();
 	void stop ();
 

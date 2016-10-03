@@ -161,5 +161,34 @@ uint8_t Hd44780::get_Shift_position ()
 	return position;
 }
 
+void Hd44780::RS_assert ()
+{
+	pin.setPin(RS);
+}
+
+void Hd44780::RS_disassert ()
+{
+	pin.clearPin(RS);
+}
+
+void Hd44780::E_assert ()
+{
+	pin.setPin(E);
+}
+
+void Hd44780::E_disassert ()
+{
+	pin.clearPin(E);
+}
+
+void Hd44780::RW_assert ()
+{
+	pin.setPin(RW);
+}
+
+void Hd44780::RW_disassert ()
+{
+	pin.clearPin(RW);
+}
 
 

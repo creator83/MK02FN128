@@ -1,6 +1,7 @@
 #include "ftm.h"
 
 FTM_MemMapPtr Ftm::ftm_ptr[3]={FTM0, FTM1, FTM2};
+IRQn Ftm::n_interrupt [3]= {FTM0_IRQn, FTM1_IRQn, FTM2_IRQn};
 
 
 Ftm::Ftm (nFtm n_, sourceClock s)
@@ -42,6 +43,13 @@ void Ftm::setInitValue (uint16_t &val)
 void Ftm::interruptEnable ()
 {
 	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_TOIE_MASK;
+	NVIC_EnableIRQ (n_interrupt[num_ftm]);
+}
+
+void Ftm::interruptDisable ()
+{
+	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~ FTM_SC_TOIE_MASK;
+	NVIC_DisableIRQ (n_interrupt[num_ftm]);
 }
 
 void Ftm::start ()
@@ -54,7 +62,7 @@ void Ftm::stop ()
 	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~FTM_SC_CLKS_MASK;
 }
 
-void Ftm::clearTofFlag ()
+void Ftm::clearTof ()
 {
 	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~ FTM_SC_TOF_MASK;
 }
