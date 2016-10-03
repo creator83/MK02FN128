@@ -39,6 +39,11 @@ void Ftm::setInitValue (uint16_t &val)
 
 }
 
+void Ftm::interruptEnable ()
+{
+	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_TOIE_MASK;
+}
+
 void Ftm::start ()
 {
 	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_CLKS(s_clock);
@@ -47,5 +52,10 @@ void Ftm::start ()
 void Ftm::stop ()
 {
 	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~FTM_SC_CLKS_MASK;
+}
+
+void Ftm::clearTofFlag ()
+{
+	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~ FTM_SC_TOF_MASK;
 }
 

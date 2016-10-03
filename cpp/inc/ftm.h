@@ -31,7 +31,8 @@ public:
 	void setPeriod (const uint16_t &);
 	void setChannelValue (const uint16_t &);
 	void setInitValue (uint16_t &);
-	void clear_flag ();
+	void clearTofFlag ();
+	void interruptEnable ();
 	void start ();
 	void stop ();
 
