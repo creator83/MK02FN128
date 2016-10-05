@@ -86,7 +86,7 @@ public:
   uint8_t receive ();
   uint8_t exchange (uint8_t data);
 
-  void put_data (uint16_t data, uint8_t cs, uint8_t ctar);
+  void put_data (uint16_t data, uint8_t cs, uint8_t ctar, State cont = off);
   uint16_t get_data ();
   bool flag_tcf ();
   bool flag_tfff ();

@@ -129,10 +129,10 @@ uint8_t Spi::exchange (uint8_t data)
 
 }
 
-void Spi::put_data (uint16_t data, uint8_t cs, uint8_t ctar)
+void Spi::put_data (uint16_t data, uint8_t cs, uint8_t ctar, State cont)
 {
 
-	SPI0->PUSHR = SPI_PUSHR_PCS(1<<cs)|SPI_PUSHR_TXDATA(data)|SPI_PUSHR_CTAS(ctar);
+	SPI0->PUSHR = SPI_PUSHR_PCS(1<<cs)|SPI_PUSHR_TXDATA(data)|SPI_PUSHR_CTAS(ctar)|SPI_PUSHR_CONT(cont);
 }
 
 uint16_t Spi::get_data ()
