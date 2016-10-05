@@ -24,7 +24,7 @@ void Qd::setMode ()
 	//===Settings timer===//
 	FTM_SC_REG(ftm_ptr[num_ftm]) = 0;
 	//setPeriod(4);
-	FTM_MOD_REG (ftm_ptr[num_ftm]) = 0;
+	FTM_MOD_REG (ftm_ptr[num_ftm]) = 0xFFFF;
 	FTM_CNTIN_REG(ftm_ptr[num_ftm]) = 0;
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 0) = 0;
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 1) = 0;

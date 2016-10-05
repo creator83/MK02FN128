@@ -29,8 +29,8 @@ void Buffer::pars (const uint16_t & val)
 		arr [0] = Array_char [tous];
 		arr [1] = Array_char [hundr];
 		arr [2] = Array_char [dec];
-		arr [3] = Array_char [dec];
-		arr [n-1] = 0;
+		arr [3] = Array_char [ones];
+		arr [n] = 0;
 
 	/*arr [0] = Array_char [tous];
 	arr [1] = Array_char [hundr];
