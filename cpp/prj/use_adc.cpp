@@ -4,12 +4,16 @@
 #include "pit.h"
 #include "tact.h"
 #include "adc.h"
+#include "buffer.h"
+#include "hd44780.h"
 
-tact frq;
+Tact frq;
 const char led = 0;
-gpio E(gpio::E);
-pit del(pit::ch0, 1, pit::ms);
-segled indicator(segled::B);
+Gpio E(Gpio::E);
+Pit del(Pit::ch0, 1, Pit::ms);
+Buffer val (4);
+Hd44780 display;
+
 const char adc_ch = 1;
 uint16_t calibr;
 
@@ -31,13 +35,6 @@ extern "C"
 void PIT_IRQHandler()
 {
 	del.clear_flag();
-	if (flag.led_indicator_delay)flag.led_indicator_delay = 0;
-	else
-	{
-		indicator.digit();
-		flag.led_indicator_delay = 1;
-	}
-
 }
 
 uint16_t result [4];
@@ -45,13 +42,13 @@ uint16_t result [4];
 int main()
 {
 	init_adc ();
-
-	//adc t_couple (adc::SE0, adc::bit16);
-
+	display.set_position(0,2);
+	display.send_string("Adc value:");
 	while (1)
 	{
-		//indicator.get_buffer (t_couple.convert());
-		indicator.get_buffer (conv_adc(adc_ch));
+		display.set_position(1,0);
+		val.pars(conv_adc(adc_ch));
+		display.send_string(4, val.getArray());
 		delay_ms(200);
 	}
 }
