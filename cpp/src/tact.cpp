@@ -37,7 +37,7 @@ void Tact::init_FEI ()
 
 	//=== Switch to FEI Mode
 	/* MCG_C1: CLKS=0 (output is FLL),FRDIV=0,IREFS=1 ( slow internal reference clock is selected),
-	 *	IRCLKEN=1 (Internal Reference Clock Enable),IREFSTEN=0 */
+	 * IRCLKEN=1 (Internal Reference Clock Enable),IREFSTEN=0 */
 	MCG->C1 = MCG_C1_CLKS(0x00)|MCG_C1_FRDIV(0x00)|MCG_C1_IREFS_MASK|MCG_C1_IRCLKEN_MASK;
 
 	/* MCG_C2: LOCRE0=0 (Interrupt request on a loss external reference clock),

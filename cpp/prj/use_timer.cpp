@@ -11,7 +11,6 @@
 
 extern "C"
 {
-	void FTM1_IRQHandler();
 	void PIT1_IRQHandler();
 }
 
@@ -54,24 +53,25 @@ void PIT1_IRQHandler()
 }
 
 void initPwm ();
-//void encod ();
+void encoder_hw ();
+void encoder_sw ();
 
 
 int main ()
 {
-	A.settingPin(encA, Gpio::GPIO, Gpio::Input);
-	A.settingPin(encB, Gpio::GPIO, Gpio::Input);
-	A.PuPdPin(encA, Gpio::On, Gpio::PullUp);
-	A.PuPdPin(encB, Gpio::On, Gpio::PullUp);
 	//pit1.interrupt_enable();
 	//pit1.start();
 	//encod ();
 
-	display.set_position(0, 0);
+	display.set_position(0, 1);
 	display.send_string("Value");
 	initPwm();
 	while (1)
 	{
+		display.set_position(1,0);
+		val.pars(encoder.getValue());
+		display.send_string(3, val.getArray());
+		led_pwm.setChannelValue(encoder.getValue());
 	/*	scan_enc ();
 		display.set_position(1,0);
 		display.send_string(3, val.getArray());
@@ -91,6 +91,15 @@ int main ()
 	}
 }
 
+void encoder_sw ()
+{
+	A.settingPin(encA, Gpio::GPIO, Gpio::Input);
+	A.settingPin(encB, Gpio::GPIO, Gpio::Input);
+	A.PuPdPin(encA, Gpio::On, Gpio::PullUp);
+	A.PuPdPin(encB, Gpio::On, Gpio::PullUp);
+}
+
+
 void initPwm ()
 {
 	led_pwm.setDivision(Pwm::div4);
@@ -98,8 +107,8 @@ void initPwm ()
 	led_pwm.setChannelValue(duty);
 	led_pwm.start();
 }
-/*
-void encod ()
+
+void encoder_hw ()
 {
 	SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
 	//enable the clock for FTM1
@@ -118,7 +127,7 @@ void encod ()
 	//configuring the input pins:
 	  PORTA_PCR12 = PORT_PCR_MUX(7); // FTM1 CH0
 	  PORTA_PCR13 = PORT_PCR_MUX(7); // FTM1 CH1
-}*/
+}
 
 void scan_enc ()
 {
