@@ -31,7 +31,8 @@ public:
 	void setDivision (division div);
 	void setPeriod (const uint16_t &);
 	void setChannelValue (const uint16_t &);
-	void setInitValue (uint16_t &);
+	void setInitValue (uint16_t );
+	void setFilter (uint8_t val);
 	void clearTof ();
 	void interruptEnable ();
 	void interruptDisable ();

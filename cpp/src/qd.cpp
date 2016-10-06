@@ -4,7 +4,7 @@
 
 
 Qd::Qd (uint16_t range)
-:Ftm (QdDef::N)
+:Ftm (QdDef::N, Ftm::Fixed_clk)
 {
 	high = range;
 	setMode ();
@@ -23,13 +23,16 @@ void Qd::setMode ()
 
 	//===Settings timer===//
 	FTM_SC_REG(ftm_ptr[num_ftm]) = 0;
-	//setPeriod(4);
-	FTM_MOD_REG (ftm_ptr[num_ftm]) = 0xFFFF;
-	FTM_CNTIN_REG(ftm_ptr[num_ftm]) = 0;
+	setPeriod(0);
+	setInitValue(0);
+	setDivision(Ftm::div128);
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 0) = 0;
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 1) = 0;
-	FTM_QDCTRL_REG(ftm_ptr[num_ftm]) |= FTM_QDCTRL_QUADEN_MASK;
-	FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK|FTM_MODE_FTMEN_MASK;
+	FTM_QDCTRL_REG(ftm_ptr[num_ftm]) |= FTM_QDCTRL_QUADEN_MASK
+			|FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK
+			;
+	setFilter(1);
+	//FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK|FTM_MODE_FTMEN_MASK;
 	start ();
 }
 

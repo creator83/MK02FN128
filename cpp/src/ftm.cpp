@@ -34,10 +34,16 @@ void Ftm::setChannelValue (const uint16_t &val)
 	FTM_CnV_REG(ftm_ptr[num_ftm], num_ch) = val;
 }
 
-void Ftm::setInitValue (uint16_t &val)
+void Ftm::setInitValue (uint16_t val)
 {
 	FTM_CNTIN_REG(ftm_ptr[num_ftm]) = val;
 
+}
+
+void Ftm::setFilter (uint8_t val)
+{
+	FTM_FILTER_REG (ftm_ptr[num_ftm]) &=~ (0x0F << (num_ch*4));
+	FTM_FILTER_REG (ftm_ptr[num_ftm]) |= val << (num_ch*4);
 }
 
 void Ftm::interruptEnable ()
