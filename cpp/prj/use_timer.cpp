@@ -16,13 +16,13 @@ extern "C"
 
 Tact frq;
 Pwm led_pwm (Pwm::FTM_0, Pwm::ch0, Pwm::EdgePwm, Pwm::highPulse);
-//Qd encoder (100);
+//Qd encoder (1000);
 Pit pit1 (Pit::ch1, 1);
 Hd44780 display;
 Buffer val (3);
 Gpio B (Gpio::B);
 
-const uint8_t period = 100;
+const uint8_t period = 1000;
 const uint8_t duty = 100;
 uint16_t N;
 const char encA = 1 ;
@@ -51,10 +51,11 @@ void encoder_sw (Gpio &);
 
 int main ()
 {
+	Qd encoder (1000);
 	//pit1.interrupt_enable();
 	//pit1.start();
 	//encod ();
-	encoder_hw ();
+	//encoder_hw ();
 	//B.settingPin(encA, Gpio::GPIO);
 	display.set_position(0, 0);
 	display.send_string("CNT");
