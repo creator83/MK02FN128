@@ -27,14 +27,13 @@ void PIT1_IRQHandler()
 
 int main ()
 {
-	Xpt2046 touch (spi0);
+
 	/*pit1.interrupt_enable();
 	pit1.start();*/
 
 
 	while (1)
 	{
-		touch.getXY();
 
 		/*reg.send(0xF0);
 		delay_ms(500);

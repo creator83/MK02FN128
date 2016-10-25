@@ -6,7 +6,7 @@
 
 Tact frq;
 
-const uint8_t led = 6;
+const uint8_t led = 25;
 
 uint8_t s [8]
 		   { 0x1F,
@@ -21,13 +21,13 @@ uint8_t s [8]
 
 int main ()
 {
-	Hd44780 display;
+	/*Hd44780 display;
 	display.set_position (0,7);
 	display.send_string ((uint8_t*)"HelloFrom");
 	display.newChar(s, 0);
 	display.set_position (1,2);
-	display.data(0);
-	Gpio D (Gpio::D);
+	display.data(0);*/
+	Gpio D (Gpio::E);
 	D.settingPin(led);
 	while (1)
 	{

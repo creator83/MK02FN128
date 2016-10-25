@@ -32,7 +32,7 @@ public:
   //function for pins
 
   void settingPin (uint8_t pin , mux mx = GPIO, mode m = Output);
-  void settingPin (uint8_t pin , uint8_t mx = 1, uint8_t m = 1);
+  //void settingPin (uint8_t pin , uint8_t mx = 1, uint8_t m = 1);
   void settingPinDirection (uint8_t pin , mode m);
   void settingPinDirection (uint8_t pin , uint8_t m);
   void PuPdPin (uint8_t pin, state s, PP p);
