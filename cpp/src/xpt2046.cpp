@@ -12,16 +12,16 @@ void Xpt2046::setMode ()
 {
 	//===settings GPIO===//
 	//CS
-	mod->set_CS(Xpt2046Def::CsPort, Xpt2046Def::CsPin, Gpio::Alt2,Xpt2046Def::CsNumber);
+	mod->set_CS(Xpt2046Def::CsPort, Xpt2046Def::CsPin, Gpio::mux::Alt2,Xpt2046Def::CsNumber);
 
 	//SCK
-	mod->set_SCK(Xpt2046Def::SckPort, Xpt2046Def::SckPin, Gpio::Alt2);
+	mod->set_SCK(Xpt2046Def::SckPort, Xpt2046Def::SckPin, Gpio::mux::Alt2);
 
 	//MISO
-	mod->set_MISO (Xpt2046Def::MisoPort, Xpt2046Def::MisoPin, Gpio::Alt2);
+	mod->set_MISO (Xpt2046Def::MisoPort, Xpt2046Def::MisoPin, Gpio::mux::Alt2);
 
 	//MOSI
-	mod->set_MOSI (Xpt2046Def::MosiPort, Xpt2046Def::MosiPin, Gpio::Alt2);
+	mod->set_MOSI (Xpt2046Def::MosiPort, Xpt2046Def::MosiPin, Gpio::mux::Alt2);
 
 	//settings SPI
 	mod->set_cpha(Spi::first);

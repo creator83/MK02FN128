@@ -12,13 +12,13 @@ void Shift::setMode ()
 {
 	//===settings GPIO===//
 	//CS
-	mod->set_CS(ShiftDef::CsPort, ShiftDef::CsPin, Gpio::Alt2, ShiftDef::CsNumber);
+	mod->set_CS(ShiftDef::CsPort, ShiftDef::CsPin, Gpio::mux::Alt2, ShiftDef::CsNumber);
 
 	//SCK
-	mod->set_SCK(ShiftDef::SckPort, ShiftDef::SckPin, Gpio::Alt2);
+	mod->set_SCK(ShiftDef::SckPort, ShiftDef::SckPin, Gpio::mux::Alt2);
 
 	//MOSI
-	mod->set_MOSI(ShiftDef::MosiPort, ShiftDef::MosiPin, Gpio::Alt2);
+	mod->set_MOSI(ShiftDef::MosiPort, ShiftDef::MosiPin, Gpio::mux::Alt2);
 
 	//settings SPI
 	mod->set_cpha(Spi::first);

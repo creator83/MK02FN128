@@ -22,7 +22,7 @@ Hd44780 display;
 Buffer val (3);
 Gpio B (Gpio::B);
 
-const uint8_t period = 1000;
+const uint8_t period = 100;
 const uint8_t duty = 100;
 uint16_t N;
 const char encA = 1 ;
