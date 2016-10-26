@@ -7,7 +7,7 @@ namespace Xpt2046Def
 
 const Gpio::Port CsPort = Gpio::Port::E;
 const uint8_t CsPin = 16;
-const Spi::CS_number CsNumber = Spi::CS0;
+const Spi::CS_number CsNumber = Spi::CS_number::CS0;
 
 //SCK
 const Gpio::Port SckPort = Gpio::Port::E;
@@ -21,7 +21,7 @@ const uint8_t MisoPin = 19;
 const Gpio::Port MosiPort = Gpio::Port::E;
 const uint8_t MosiPin = 18;
 
-const Spi::CTAR_number CtarNumber = Spi::CTAR0;
+const Spi::CTAR_number CtarNumber = Spi::CTAR_number::CTAR0;
 }
 
 #ifndef XPT2046_H

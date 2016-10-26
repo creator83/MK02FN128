@@ -21,10 +21,10 @@ void Shift::setMode ()
 	mod->set_MOSI(ShiftDef::MosiPort, ShiftDef::MosiPin, Gpio::mux::Alt2);
 
 	//settings SPI
-	mod->set_cpha(Spi::first);
-	mod->set_cpol(Spi::neg);
-	mod->set_baudrate(Spi::div8);
-	mod->set_f_size(Spi::bit_8);
+	mod->set_cpha(Spi::Cpha::first);
+	mod->set_cpol(Spi::Cpol::neg);
+	mod->set_baudrate(Spi::Division::div8);
+	mod->set_f_size(Spi::Fsize::bit_8);
 }
 
 void Shift::send (uint8_t data)
