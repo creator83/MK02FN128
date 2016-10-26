@@ -6,19 +6,19 @@ namespace ShiftDef
 {
 //===Defenitions===//
 //CS
-const Gpio::Port CsPort = Gpio::C;
+const Gpio::Port CsPort = Gpio::Port::C;
 const uint8_t CsPin = 0;
-const Spi::CS_number CsNumber = Spi::CS4;
+const Spi::CS_number CsNumber = Spi::CS_number::CS4;
 
 //SCK
-const Gpio::Port SckPort = Gpio::E;
+const Gpio::Port SckPort = Gpio::Port::E;
 const uint8_t SckPin = 17;
 
 //MOSI
-const Gpio::Port MosiPort = Gpio::E;
+const Gpio::Port MosiPort = Gpio::Port::E;
 const uint8_t MosiPin = 18;
 
-const Spi::CTAR_number CtarNumber = Spi::CTAR1;
+const Spi::CTAR_number CtarNumber = Spi::CTAR_number::CTAR1;
 }
 
 #ifndef SHIFT_REGISTR_H

@@ -16,17 +16,12 @@ void Spi::set_cpha (Spi &s, Cpha c)
 	s.set_cpha(c);
 }
 
-void Spi::set_ctar (uint8_t n)
-{
-	ctar_N = n;
-}
-
 void Spi::update_ctar ()
 {
 
 }
 
-void Spi::set_ctar (Spi &s, uint8_t c)
+void Spi::set_ctar (Spi &s, CTAR_number c)
 {
 	s.set_ctar(c);
 }
@@ -41,6 +36,10 @@ void Spi::set_f_size (Spi &s, Fsize f)
 	s.set_f_size(f);
 }
 
+void Spi::set_ctar (CTAR_number n)
+{
+	ctar_ = (uint8_t)n;
+}
 
 
 Spi::Spi( Role r)
@@ -60,30 +59,30 @@ Spi::Spi( Role r)
 
 void Spi::set_cpol (Cpol c)
 {
-	s_ctar [ctar_N]->cpol = c;
-	SPI0_CTAR(ctar_N) &= ~ SPI_CTAR_CPOL_MASK;
-	SPI0_CTAR(ctar_N) |= SPI_CTAR_SLAVE_CPOL(c);
+	s_ctar [ctar_]->cpol = (uint8_t)c;
+	SPI0_CTAR(ctar_) &= ~ SPI_CTAR_CPOL_MASK;
+	SPI0_CTAR(ctar_) |= SPI_CTAR_SLAVE_CPOL(c);
 }
 
 void Spi::set_cpha (Cpha c)
 {
-	s_ctar [ctar_N]->cpha = c;
-	SPI0_CTAR(ctar_N) &= ~ SPI_CTAR_CPHA_MASK;
-	SPI0_CTAR(ctar_N) |= SPI_CTAR_SLAVE_CPHA(c);
+	s_ctar [ctar_]->cpha = (uint8_t)c;
+	SPI0_CTAR(ctar_) &= ~ SPI_CTAR_CPHA_MASK;
+	SPI0_CTAR(ctar_) |= SPI_CTAR_SLAVE_CPHA(c);
 }
 
 void Spi::set_f_size (Fsize f)
 {
-	s_ctar [ctar_N]->f_size = f;
-	SPI0_CTAR(ctar_N) &= ~ SPI_CTAR_FMSZ(0x0F);
-	SPI0_CTAR(ctar_N) |= SPI_CTAR_FMSZ(f);
+	s_ctar [ctar_]->f_size = (uint8_t)f;
+	SPI0_CTAR(ctar_) &= ~ SPI_CTAR_FMSZ(0x0F);
+	SPI0_CTAR(ctar_) |= SPI_CTAR_FMSZ(f);
 }
 
 void Spi::set_baudrate (Division d)
 {
-	s_ctar [ctar_N]->br = d;
-	SPI0_CTAR(ctar_N) &= ~ SPI_CTAR_BR(0x0F);
-	SPI0_CTAR(ctar_N) |= SPI_CTAR_BR (d);
+	s_ctar [ctar_]->br = (uint8_t) d;
+	SPI0_CTAR(ctar_) &= ~ SPI_CTAR_BR(0x0F);
+	SPI0_CTAR(ctar_) |= SPI_CTAR_BR (d);
 }
 
 
@@ -91,7 +90,7 @@ void Spi::set_CS (Gpio::Port p, const uint8_t & pin, Gpio::mux m, Spi::CS_number
 {
 	Cs.settingPinPort(p);
 	Cs.settingPin(pin, m);
-	SPI0->MCR |= SPI_MCR_PCSIS(1<<n);
+	SPI0->MCR |= SPI_MCR_PCSIS(1<<(uint8_t)n);
 }
 
 void Spi::set_SCK (Gpio::Port p, const uint8_t & pin, Gpio::mux m)
@@ -129,10 +128,10 @@ uint8_t Spi::exchange (uint8_t data)
 
 }
 
-void Spi::put_data (uint16_t data, uint8_t cs, uint8_t ctar, State cont)
+void Spi::put_data (uint16_t data, CS_number cs, CTAR_number ctar, State cont)
 {
 
-	SPI0->PUSHR = SPI_PUSHR_PCS(1<<cs)|SPI_PUSHR_TXDATA(data)|SPI_PUSHR_CTAS(ctar)|SPI_PUSHR_CONT(cont);
+	SPI0->PUSHR = SPI_PUSHR_PCS(1<<(uint8_t)cs)|SPI_PUSHR_TXDATA(data)|SPI_PUSHR_CTAS(ctar)|SPI_PUSHR_CONT(cont);
 }
 
 uint16_t Spi::get_data ()

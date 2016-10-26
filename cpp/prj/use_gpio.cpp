@@ -6,32 +6,15 @@
 
 Tact frq;
 
-const uint8_t led = 25;
-
-uint8_t s [8]
-		   { 0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   0x1F,
-		   };
+const uint8_t led = 6;
 
 int main ()
 {
-	/*Hd44780 display;
-	display.set_position (0,7);
-	display.send_string ((uint8_t*)"HelloFrom");
-	display.newChar(s, 0);
-	display.set_position (1,2);
-	display.data(0);*/
-	Gpio D (Gpio::E);
+	Gpio D (Gpio::Port::D);
 	D.settingPin(led);
 	while (1)
 	{
-		D.changePinState(led);
+		D.toglePin (led);
 		delay_ms(1000);
 	}
 }

@@ -17,11 +17,11 @@ void Qd::setMode ()
 	//pha
 	pha.settingPinPort(QdDef::PhaPort);
 	pha.settingPin(QdDef::PhaPin, QdDef::PhaAlt);
-	pha.PuPdPin(QdDef::PhaPin, Gpio::On, Gpio::PullUp);
+	pha.PuPdPin(QdDef::PhaPin, Gpio::state::On, Gpio::PP::PullUp);
 	//phb
 	phb.settingPinPort(QdDef::PhbPort);
 	phb.settingPin(QdDef::PhbPin, QdDef::PhbAlt);
-	phb.PuPdPin(QdDef::PhbPin, Gpio::On, Gpio::PullUp);
+	phb.PuPdPin(QdDef::PhbPin, Gpio::state::On, Gpio::PP::PullUp);
 
 	//===Settings timer===//
 	FTM_SC_REG(ftm_ptr[num_ftm]) = 0;
@@ -32,7 +32,6 @@ void Qd::setMode ()
 
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 0) = 0;
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 1) = 0;
-	setDivision(Ftm::div8);
 	FTM_QDCTRL_REG(ftm_ptr[num_ftm]) |= FTM_QDCTRL_QUADEN_MASK
 			//|FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK
 			;

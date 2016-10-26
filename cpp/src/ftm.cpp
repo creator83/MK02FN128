@@ -4,18 +4,26 @@ FTM_MemMapPtr Ftm::ftm_ptr[3]={FTM0, FTM1, FTM2};
 IRQn Ftm::n_interrupt [3]= {FTM0_IRQn, FTM1_IRQn, FTM2_IRQn};
 
 
-Ftm::Ftm (nFtm n_, sourceClock s)
+Ftm::Ftm (nFtm n_, division div, sourceClock s)
 {
-	SIM->SCGC6 |= 1 << (SIM_SCGC6_FTM0_SHIFT+n_);
+	num_ftm = static_cast <uint8_t> (n_);
+	SIM->SCGC6 |= 1 << (SIM_SCGC6_FTM0_SHIFT+num_ftm);
 	//FTM_MODE_REG(ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK;
-	num_ftm = n_;
 	s_clock = s;
-	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~FTM_SC_CLKS_MASK;
+	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~(FTM_SC_CLKS_MASK|FTM_SC_PS(0x07));
+	FTM_SC_REG(ftm_ptr[num_ftm]) |= FTM_SC_PS(div);
+}
+
+
+Ftm::Ftm (nFtm n_)
+{
+	num_ftm = static_cast <uint8_t> (n_);
+	SIM->SCGC6 |= 1 << (SIM_SCGC6_FTM0_SHIFT+num_ftm);
 }
 
 void Ftm::setChannel (channel & ch)
 {
-	num_ch = ch;
+	num_ch = static_cast <uint8_t> (ch);
 }
 
 void  Ftm::setDivision (division div)
@@ -72,4 +80,5 @@ void Ftm::clearTof ()
 {
 	FTM_SC_REG(ftm_ptr[num_ftm]) &= ~ FTM_SC_TOF_MASK;
 }
+
 
