@@ -17,27 +17,22 @@ void Qd::setMode ()
 	//pha
 	pha.settingPinPort(QdDef::PhaPort);
 	pha.settingPin(QdDef::PhaPin, QdDef::PhaAlt);
-	pha.PuPdPin(QdDef::PhaPin, Gpio::state::On, Gpio::PP::PullUp);
+
 	//phb
 	phb.settingPinPort(QdDef::PhbPort);
 	phb.settingPin(QdDef::PhbPin, QdDef::PhbAlt);
-	phb.PuPdPin(QdDef::PhbPin, Gpio::state::On, Gpio::PP::PullUp);
 
 	//===Settings timer===//
 	FTM_SC_REG(ftm_ptr[num_ftm]) = 0;
 	setPeriod(FTM_MOD_MOD_MASK);
 	setInitValue(0);
 	FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_WPDIS_MASK;
-	//FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_FTMEN_MASK;
+	FTM_MODE_REG (ftm_ptr[num_ftm]) |= FTM_MODE_FTMEN_MASK;
 
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 0) = 0;
 	FTM_CnSC_REG(ftm_ptr[num_ftm], 1) = 0;
-	FTM_QDCTRL_REG(ftm_ptr[num_ftm]) |= FTM_QDCTRL_QUADEN_MASK
-			//|FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK
-			;
-	//setFilter(2);
-	//FTM_FILTER_REG (ftm_ptr[num_ftm]) |= FTM_FILTER_CH0FVAL(2) | FTM_FILTER_CH1FVAL(2) ;
-	//
+	FTM_QDCTRL_REG(ftm_ptr[num_ftm]) |= FTM_QDCTRL_QUADEN_MASK|FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK;
+	FTM_FILTER_REG (ftm_ptr[num_ftm]) |= FTM_FILTER_CH0FVAL(2) | FTM_FILTER_CH1FVAL(2) ;
 	start ();
 }
 
