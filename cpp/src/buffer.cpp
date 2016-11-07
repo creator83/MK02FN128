@@ -1,55 +1,73 @@
 #include "buffer.h"
 
-const uint8_t Buffer::Array_char [10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+template <typename T>
+const uint8_t Buffer<T>::Array_char [10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+template <typename T>
+const uint8_t Buffer<T>::ArraySegChar [11] = {0x3F ,0x06 , 0x5B , 0x4F , 0x66 , 0x6D , 0x7D, 0x07 , 0x7F , 0x6F ,  0x00};
+template <typename T>
+const uint8_t Buffer<T>::ArraySegDpChar [11] = {0xBF , 0x86 , 0xDB , 0xCF , 0xE6 , 0xED , 0xFD , 0x87 , 0xFF , 0xEF , 0x00};
 
-Buffer::Buffer(uint8_t size)
+template <typename T>
+Buffer<T>::Buffer(uint8_t size_)
 {
+	size = size_;
 	arr [size+1];
 	n= size+1;
 	arr[size] = 0;
-	//uint8_t *ptr = new
 }
 
-uint8_t Buffer::getArraySize ()
+template <typename T>
+uint8_t Buffer<T>::getArraySize ()
 {
 	return n;
 }
 
-void Buffer::pars (const uint16_t & val)
+template <typename T>
+void Buffer<T>::pars (const uint16_t & val)
 {
-	uint8_t tous, hundr, dec, ones;
+	uint8_t arrVal[5] = {0};
 	uint16_t temp = val;
-	count = 0;
-	for (tous=0;temp>=1000;++tous, ++count)temp-=1000;
-	for (hundr=0;temp>=100;++hundr, ++count)temp -=100;
-	for (dec=0;temp>=10;++dec, ++count)temp -=10;
-	ones = temp%10;
-	++count;
-		arr [0] = Array_char [tous];
-		arr [1] = Array_char [hundr];
-		arr [2] = Array_char [dec];
-		arr [3] = Array_char [ones];
-		arr [n] = 0;
+	uint8_t * tempPtr = arrVal;
+	count = 5;
+	for (arrVal[0]=0;temp>=10000;++arrVal[0]) temp -= 10000;
 
-	/*arr [0] = Array_char [tous];
-	arr [1] = Array_char [hundr];
-	arr [2] = Array_char [dec];
-	arr [3] = Array_char [ones];
-	arr [count] = '\0';*/
+	for (arrVal[1]=0;temp>=1000;++arrVal[1])temp-=1000;
+
+	for (arrVal[2]=0;temp>=100;++arrVal[2])temp -=100;
+
+	for (arrVal[3]=0;temp>=10;++arrVal[3])temp -=10;
+
+	arrVal[4] = temp%10;
+
+	while (!*tempPtr++)
+	{
+		--count;
+	}
+	if (count<2)count = 2;
+	for (uint8_t i=count-1;i<5;++i)
+	{
+		arr [i] = ArraySegChar [arrVal[i]];
+	}
+	arr [2] = ArraySegDpChar [arrVal[2]];
+	real = &arr [(size-1)-count];
+
 }
 
-char * Buffer::getArray ()
+template <typename T>
+T * Buffer<T>::getArray ()
 {
 	return arr;
 }
 
-char * Buffer::getElement (uint8_t n)
+template <typename T>
+T * Buffer<T>::getElement (uint8_t n)
 {
 	return &arr[n];
 }
 
-bool Buffer::setElement (uint8_t el, uint8_t val)
+template <typename T>
+bool Buffer<T>::setElement (uint8_t el, uint8_t val)
 {
 	if (el>(n-1)) return false;
 	else
